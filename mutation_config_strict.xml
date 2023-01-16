@@ -221,6 +221,10 @@
         <!-- excludes anything between two tokens  -->
         <!-- single line comments  -->
         <token begin="//" end="\n"/>
+        <!-- multi line comments  -->
+        <token begin="/\*" end="\*/"/>
+        <!-- strings  -->
+
         <!-- exclude dart exports and imports  -->
         <token begin="export &apos;" end="&apos;;"/>
         <token begin="import &apos;" end="&apos;;"/>
@@ -236,6 +240,11 @@
         <!-- excludes anything that matches a pattern  -->
         <!-- multi line comments  -->
         <regex pattern="/[*].*?[*]/" dotAll="true"/>
+        <regex pattern="'''(.|\n)*?'''"/>
+
+        <!-- strings  -->
+        <regex pattern="&quot;(.|\n)*?&quot;"/>
+        <regex pattern="'(.|\n)*?'"/>
 
         <!-- exclude increment and decrement operators. Produces mostly false positives.  -->
         <regex pattern="\+\+"/>
