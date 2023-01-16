@@ -60,14 +60,12 @@ void main(List<String> arguments) async {
       abbr: 'v',
       help: 'Verbose output',
       negatable: false,
-      defaultsTo: false,
     )
     ..addFlag(
       quiet,
       abbr: 'q',
       help: 'Suppress output to console. Overrides verbose.',
       negatable: false,
-      defaultsTo: false,
     )
     ..addFlag(
       dry,

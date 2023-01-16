@@ -7,8 +7,8 @@
  */
 class TestData {
   String text = 'default';
-  double number1 = 25.0;
-  double number2 = 25.0;
+  double number1 = 25;
+  double number2 = 25;
   bool on = false;
 
   double calc(double x) {
@@ -23,16 +23,5 @@ class TestData {
       return '$text $y';
     }
     return 'default $y';
-  }
-
-  void changeState(dynamic event) {
-    if (event.a as bool &&
-        event.b as bool &&
-        (event.c as bool ||
-            event.d as bool ||
-            (event.f as bool && event.g as bool)) &&
-        event.e as bool) {
-      on = true;
-    }
   }
 }

@@ -21,11 +21,11 @@ double poly(double x, double a, double b, double c) {
 }
 
 double inner2(double x, double y, double z) {
-  return poly(x, y, z, 2.0);
+  return poly(x, y, z, 2);
 }
 
 double inner(double x, double y) {
-  return inner2(x, y, 1.0);
+  return inner2(x, y, 1);
 }
 
 double outer(double x, double y) {

@@ -25,7 +25,8 @@ String createLicenseText() {
 }
 
 String _selfLicense() {
-  return '''Copyright 2022, domohuhn. 
+  return '''
+Copyright 2022, domohuhn. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are

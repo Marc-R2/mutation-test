@@ -50,7 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/analyzer',
     authors: [],
     version: '5.3.1',
-    license: '''Copyright 2013, the Dart project authors.
+    license: '''
+Copyright 2013, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -88,7 +89,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/args',
     authors: [],
     version: '2.3.1',
-    license: '''Copyright 2013, the Dart project authors. 
+    license: '''
+Copyright 2013, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -122,11 +124,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'async',
     description:
-        'Utility functions and classes related to the \'dart:async\' library.',
+        "Utility functions and classes related to the 'dart:async' library.",
     repository: 'https://github.com/dart-lang/async',
     authors: [],
     version: '2.10.0',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -160,11 +163,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'boolean_selector',
     description:
-        'A flexible syntax for boolean expressions, based on a simplified version of Dart\'s expression syntax.',
+        "A flexible syntax for boolean expressions, based on a simplified version of Dart's expression syntax.",
     repository: 'https://github.com/dart-lang/boolean_selector',
     authors: [],
     version: '2.1.1',
-    license: '''Copyright 2016, the Dart project authors.
+    license: '''
+Copyright 2016, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -202,7 +206,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/collection',
     authors: [],
     version: '1.17.0',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -240,7 +245,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/convert',
     authors: [],
     version: '3.1.1',
-    license: '''Copyright 2015, the Dart project authors.
+    license: '''
+Copyright 2015, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -277,7 +283,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/coverage',
     authors: [],
     version: '1.6.1',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -315,7 +322,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/crypto',
     authors: [],
     version: '3.0.2',
-    license: '''Copyright 2015, the Dart project authors.
+    license: '''
+Copyright 2015, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -355,7 +363,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/espresso3389/flutter_oss_licenses',
     authors: [],
     version: '2.0.2',
-    license: '''MIT License
+    license: '''
+MIT License
 
 Copyright (c) 2019 Takashi Kawasaki
 
@@ -387,7 +396,8 @@ SOFTWARE.''',
     repository: 'https://github.com/google/file.dart/tree/master/packages/file',
     authors: [],
     version: '6.1.4',
-    license: '''Copyright 2017, the Dart project authors. All rights reserved.
+    license: '''
+Copyright 2017, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
@@ -426,7 +436,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/espresso3389/flutter_oss_licenses',
     authors: [],
     version: '2.0.1',
-    license: '''MIT License
+    license: '''
+MIT License
 
 Copyright (c) 2019 Takashi Kawasaki
 
@@ -459,7 +470,8 @@ SOFTWARE.''',
         'https://github.com/dart-lang/webdev/tree/master/frontend_server_client',
     authors: [],
     version: '3.2.0',
-    license: '''Copyright 2020, the Dart project authors. 
+    license: '''
+Copyright 2020, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -496,7 +508,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/glob',
     authors: [],
     version: '2.1.1',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -534,7 +547,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/http_multi_server',
     authors: [],
     version: '3.2.1',
-    license: '''Copyright 2014, the Dart project authors.
+    license: '''
+Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -572,7 +586,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/http_parser',
     authors: [],
     version: '4.0.2',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -610,7 +625,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/io',
     authors: [],
     version: '1.0.3',
-    license: '''Copyright 2017, the Dart project authors. 
+    license: '''
+Copyright 2017, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -648,7 +664,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/js',
     authors: [],
     version: '0.6.5',
-    license: '''Copyright 2012, the Dart project authors.
+    license: '''
+Copyright 2012, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -687,7 +704,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
         'https://github.com/google/json_serializable.dart/tree/master/json_annotation',
     authors: [],
     version: '4.7.0',
-    license: '''Copyright 2017, the Dart project authors. All rights reserved.
+    license: '''
+Copyright 2017, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
 met:
@@ -720,12 +738,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'lints',
     description:
-        '''Official Dart lint rules. Defines the 'core' and 'recommended' set of lints suggested by the Dart team.
+        '''
+Official Dart lint rules. Defines the 'core' and 'recommended' set of lints suggested by the Dart team.
 ''',
     repository: 'https://github.com/dart-lang/lints',
     authors: [],
     version: '2.0.1',
-    license: '''Copyright 2021, the Dart project authors.
+    license: '''
+Copyright 2021, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -763,7 +783,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/logging',
     authors: [],
     version: '1.1.0',
-    license: '''Copyright 2013, the Dart project authors. 
+    license: '''
+Copyright 2013, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -801,7 +822,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/matcher',
     authors: [],
     version: '0.12.14',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -835,11 +857,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'meta',
     description:
-        'Annotations used to express developer intentions that can\'t otherwise be deduced by statically analyzing source code.',
+        "Annotations used to express developer intentions that can't otherwise be deduced by statically analyzing source code.",
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/meta',
     authors: [],
     version: '1.8.0',
-    license: '''Copyright 2016, the Dart project authors.
+    license: '''
+Copyright 2016, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -877,7 +900,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/mime',
     authors: [],
     version: '1.0.3',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -915,7 +939,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     homepage: 'https://github.com/mbullington/node_preamble.dart',
     authors: ['Michael Bullington <mikebullingtn@gmail.com>'],
     version: '2.0.1',
-    license: '''The MIT License (MIT)
+    license: '''
+The MIT License (MIT)
 
 Copyright (c) 2015 Michael Bullington
 
@@ -974,7 +999,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/package_config',
     authors: [],
     version: '2.1.0',
-    license: '''Copyright 2019, the Dart project authors. 
+    license: '''
+Copyright 2019, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1012,7 +1038,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/path',
     authors: [],
     version: '1.8.3',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1051,7 +1078,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/petitparser/dart-petitparser',
     authors: [],
     version: '5.1.0',
-    license: '''The MIT License
+    license: '''
+The MIT License
 
 Copyright (c) 2006-2022 Lukas Renggli.
 All rights reserved.
@@ -1084,7 +1112,8 @@ THE SOFTWARE.''',
     repository: 'https://github.com/dart-lang/pool',
     authors: [],
     version: '1.5.1',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1118,11 +1147,12 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'pub_semver',
     description:
-        'Versions and version constraints implementing pub\'s versioning policy. This is very similar to vanilla semver, with a few corner cases.',
+        "Versions and version constraints implementing pub's versioning policy. This is very similar to vanilla semver, with a few corner cases.",
     repository: 'https://github.com/dart-lang/pub_semver',
     authors: [],
     version: '2.1.3',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1156,12 +1186,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'shelf',
     description:
-        '''A model for web server middleware that encourages composition and easy reuse.
+        '''
+A model for web server middleware that encourages composition and easy reuse.
 ''',
     repository: 'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf',
     authors: [],
     version: '1.4.0',
-    license: '''Copyright 2014, the Dart project authors.
+    license: '''
+Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1199,7 +1231,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
         'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf_packages_handler',
     authors: [],
     version: '3.0.1',
-    license: '''Copyright 2016, the Dart project authors.
+    license: '''
+Copyright 2016, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1238,7 +1271,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
         'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf_static',
     authors: [],
     version: '1.1.1',
-    license: '''Copyright 2015, the Dart project authors.
+    license: '''
+Copyright 2015, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1272,13 +1306,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'shelf_web_socket',
     description:
-        '''A shelf handler that wires up a listener for every connection.
+        '''
+A shelf handler that wires up a listener for every connection.
 ''',
     repository:
         'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf_web_socket',
     authors: [],
     version: '1.0.3',
-    license: '''Copyright 2014, the Dart project authors.
+    license: '''
+Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1315,7 +1351,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/source_map_stack_trace',
     authors: [],
     version: '2.1.1',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1352,7 +1389,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/source_maps',
     authors: [],
     version: '0.10.11',
-    license: '''Copyright 2014, the Dart project authors.
+    license: '''
+Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1389,7 +1427,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/source_span',
     authors: [],
     version: '1.9.1',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1427,7 +1466,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/stack_trace',
     authors: [],
     version: '1.11.0',
-    license: '''Copyright 2014, the Dart project authors.
+    license: '''
+Copyright 2014, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1465,7 +1505,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/stream_channel',
     authors: [],
     version: '2.1.1',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1502,7 +1543,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/string_scanner',
     authors: [],
     version: '1.2.0',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1539,7 +1581,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/term_glyph',
     authors: [],
     version: '1.2.1',
-    license: '''Copyright 2017, the Dart project authors. 
+    license: '''
+Copyright 2017, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1577,7 +1620,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test',
     authors: [],
     version: '1.22.1',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1615,7 +1659,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test_api',
     authors: [],
     version: '0.4.17',
-    license: '''Copyright 2018, the Dart project authors. 
+    license: '''
+Copyright 2018, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1653,7 +1698,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/test/tree/master/pkgs/test_core',
     authors: [],
     version: '0.4.21',
-    license: '''Copyright 2018, the Dart project authors. 
+    license: '''
+Copyright 2018, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1691,7 +1737,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/typed_data',
     authors: [],
     version: '1.3.1',
-    license: '''Copyright 2015, the Dart project authors. 
+    license: '''
+Copyright 2015, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1729,7 +1776,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/sdk/tree/main/pkg/vm_service',
     authors: [],
     version: '9.4.0',
-    license: '''Copyright 2015, the Dart project authors.
+    license: '''
+Copyright 2015, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1767,7 +1815,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/watcher',
     authors: [],
     version: '1.0.2',
-    license: '''Copyright 2014, the Dart project authors. 
+    license: '''
+Copyright 2014, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1805,7 +1854,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     repository: 'https://github.com/dart-lang/web_socket_channel',
     authors: [],
     version: '2.2.0',
-    license: '''Copyright 2016, the Dart project authors. 
+    license: '''
+Copyright 2016, the Dart project authors. 
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1839,12 +1889,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   Package(
     name: 'webkit_inspection_protocol',
     description:
-        '''A client for the Chrome DevTools Protocol (previously called the Webkit Inspection Protocol).
+        '''
+A client for the Chrome DevTools Protocol (previously called the Webkit Inspection Protocol).
 ''',
     repository: 'https://github.com/google/webkit_inspection_protocol.dart',
     authors: [],
     version: '1.2.0',
-    license: '''Copyright 2013, Google Inc.
+    license: '''
+Copyright 2013, Google Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -1883,7 +1935,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
     homepage: 'https://github.com/renggli/dart-xml',
     authors: [],
     version: '6.2.2',
-    license: '''The MIT License
+    license: '''
+The MIT License
 
 Copyright (c) 2006-2022 Lukas Renggli.
 All rights reserved.
@@ -1916,7 +1969,8 @@ THE SOFTWARE.''',
     repository: 'https://github.com/dart-lang/yaml',
     authors: [],
     version: '3.1.1',
-    license: '''Copyright (c) 2014, the Dart project authors.
+    license: '''
+Copyright (c) 2014, the Dart project authors.
 Copyright (c) 2006, Kirill Simonov.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

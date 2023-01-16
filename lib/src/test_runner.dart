@@ -92,6 +92,6 @@ class TestRunner {
 
   /// Kills the current child process
   void kill() {
-    Process.killPid(_pid, ProcessSignal.sigterm);
+    Process.killPid(_pid);
   }
 }

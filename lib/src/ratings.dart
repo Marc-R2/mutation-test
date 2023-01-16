@@ -4,7 +4,7 @@
 
 /// Rating thresholds for the results.
 class Ratings {
-  double _failure = 100.0;
+  double _failure = 100;
   bool _initialized = false;
   final List<_Limit> _limits = [];
 
@@ -49,12 +49,12 @@ class Ratings {
       return;
     }
     _failure = 80.0;
-    addRating(100.0, 'A');
-    addRating(80.0, 'B');
-    addRating(60.0, 'C');
-    addRating(40.0, 'D');
-    addRating(20.0, 'E');
-    addRating(0.0, 'F');
+    addRating(100, 'A');
+    addRating(80, 'B');
+    addRating(60, 'C');
+    addRating(40, 'D');
+    addRating(20, 'E');
+    addRating(0, 'F');
   }
 }
 

@@ -11,15 +11,15 @@ import '../example/source2.dart';
 void main() {
   final data = TestData();
   test('TestData calc', () {
-    expect(data.calc(0.0), 0.0);
+    expect(data.calc(0), 0.0);
   });
 
   test('TestData format 1', () {
-    expect(data.format(0.0), 'default 0.0');
+    expect(data.format(0), 'default 0.0');
   });
 
   test('TestData format 2', () {
-    expect(data.format(-2.0), 'default -2.0');
+    expect(data.format(-2), 'default -2.0');
   });
 
   test('TestData format 3', () {

@@ -9,7 +9,7 @@ import 'package:mutation_test/src/string_helpers.dart';
 /// Tracks the current progress and estimates the remaining time.
 class MutationProgressBar {
   MutationProgressBar(int count, this.verbose, this.threshold, this.quiet)
-      : file = ProgressBar(count, width: 30, showTotal: false, left: 'File ['),
+      : file = ProgressBar(count, showTotal: false, left: 'File ['),
         total = ProgressBar(
           count,
           width: 27,

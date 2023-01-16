@@ -44,7 +44,7 @@ void main() {
   var source2 = File('example/source2.dart').readAsStringSync();
   source2 = source2.replaceAll('\r', '');
   test('exclusion singleline 3', () {
-    expect(exclusion2.isInRange(source2, 317), false);
+    expect(exclusion2.isInRange(source2, 313), false);
     expect(exclusion2.isInRange(source2, 318), true);
     expect(exclusion2.isInRange(source2, 319), true);
     expect(exclusion2.isInRange(source2, 320), true);

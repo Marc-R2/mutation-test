@@ -72,7 +72,7 @@ void main() {
   });
 
   test('Progress bar - No text ', () {
-    final bar = ProgressBar(80, width: 30);
+    final bar = ProgressBar(80);
     bar.showPercent = false;
     bar.showTotal = false;
     bar.update(40);

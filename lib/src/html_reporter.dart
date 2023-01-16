@@ -124,7 +124,8 @@ String createSourceHtmlFile(
     if (file.lineHasMutation(i)) {
       final colorClass = file.lineHasProblem(i) ? 'problem' : 'hit';
       rv +=
-          '''<a name="$i"><button class="collapsible $colorClass"><pre class="fileContents"><span class="lineNumber">${i.toString().padLeft(8)} </span>$fmtln</pre></button>
+          '''
+<a name="$i"><button class="collapsible $colorClass"><pre class="fileContents"><span class="lineNumber">${i.toString().padLeft(8)} </span>$fmtln</pre></button>
 <div class="content">
 ${createMutationList(i, file)}
 </div></a>''';
