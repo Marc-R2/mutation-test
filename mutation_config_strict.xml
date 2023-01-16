@@ -18,25 +18,44 @@
             <mutation text="*"/>
             <mutation text="/"/>
             <mutation text="%"/>
+            <mutation text="^"/>
         </literal>
         <literal text="-">
             <mutation text="+"/>
             <mutation text="*"/>
             <mutation text="/"/>
             <mutation text="%"/>
+            <mutation text="^"/>
         </literal>
         <literal text="*">
             <mutation text="+"/>
             <mutation text="-"/>
             <mutation text="/"/>
             <mutation text="%"/>
+            <mutation text="^"/>
         </literal>
         <literal text="/">
             <mutation text="*"/>
             <mutation text="+"/>
             <mutation text="-"/>
             <mutation text="%"/>
+            <mutation text="^"/>
         </literal>
+        <literal text="%">
+            <mutation text="*"/>
+            <mutation text="/"/>
+            <mutation text="+"/>
+            <mutation text="-"/>
+            <mutation text="^"/>
+        </literal>
+        <literal text="^">
+            <mutation text="*"/>
+            <mutation text="/"/>
+            <mutation text="+"/>
+            <mutation text="-"/>
+            <mutation text="%"/>
+        </literal>
+
         <literal text="==">
             <mutation text="!="/>
             <mutation text=">"/>
@@ -59,20 +78,6 @@
             <mutation text="<="/>
             <mutation text=">="/>
         </literal>
-        <!-- <literal text="<">
-            <mutation text=">"/>
-            <mutation text="<="/>
-            <mutation text=">="/>
-            <mutation text="=="/>
-            <mutation text="!="/>
-        </literal>
-        <literal text=">">
-            <mutation text="<"/>
-            <mutation text="<="/>
-            <mutation text=">="/>
-            <mutation text="=="/>
-            <mutation text="!="/>
-        </literal> -->
 
         <literal text="!">
             <mutation text=""/>
@@ -192,6 +197,23 @@
             <mutation text="$2 ?? $2"/>
             <mutation text="$1 ?? $1"/>
         </regex>
+
+        <regex pattern="(?<=\s)<\s(?=\S|\()">
+            <mutation text="<="/>
+            <mutation text=">="/>
+            <mutation text="=="/>
+            <mutation text="!="/>
+            <mutation text=">"/>
+        </regex>
+
+        <regex pattern="(?<=\s)>\s(?=\S|\()">
+            <mutation text="<="/>
+            <mutation text=">="/>
+            <mutation text="=="/>
+            <mutation text="!="/>
+            <mutation text="<"/>
+        </regex>
+
 
     </rules>
     <!-- This element creates a blacklist, allowing you to exclude parts from the mutations -->

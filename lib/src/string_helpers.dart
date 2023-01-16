@@ -40,9 +40,7 @@ int findEndOfLineFromPosition(String text, int position) {
 /// Converts the inputs to a percentage string "[fraction]/[total]%"
 String asPercentString(int fraction, int total) {
   var percent = 0.0;
-  if (total > 0) {
-    percent = 100.0 * fraction / total;
-  }
+  if (total > 0) percent = 100.0 * fraction / total;
   return '${percent.toStringAsFixed(2)}%';
 }
 
