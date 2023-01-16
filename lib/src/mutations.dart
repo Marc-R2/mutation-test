@@ -130,31 +130,27 @@ MutatedLine createMutatedLine(
   String original,
   String mutated,
 ) {
-  if (absoluteStart < 0) {
-    absoluteStart = 0;
-  }
-  if (absoluteStart > original.length) {
-    absoluteStart = original.length;
-  }
-  if (absoluteStart > absoluteEnd) {
-    absoluteEnd = absoluteStart;
-  }
-  if (absoluteEnd > original.length) {
-    absoluteEnd = original.length;
-  }
+  if (absoluteStart < 0) absoluteStart = 0;
+  if (absoluteStart > original.length) absoluteStart = original.length;
+  if (absoluteStart > absoluteEnd) absoluteEnd = absoluteStart;
+  if (absoluteEnd > original.length) absoluteEnd = original.length;
+
   var line = findLineFromPosition(original, absoluteStart);
   final lineStart = findBeginOfLineFromPosition(original, absoluteStart);
   final lineEnd = findEndOfLineFromPosition(original, absoluteEnd);
+
   // this may be false if the mutation matches the newline character and starts there.
   final mutationStart =
       lineStart <= absoluteStart ? absoluteStart - lineStart : 0;
-  // if the mutation begin is on the newline character, we want to add one to the line number
-  if (absoluteStart + 1 == lineStart) {
-    line += 1;
-  }
+
+  // if the mutation begin is on the newline character,
+  // we want to add one to the line number
+  if (absoluteStart + 1 == lineStart) line += 1;
+
   final mutationEnd = absoluteEnd - lineStart;
   final lineEndMutated =
       findEndOfLineFromPosition(mutated, lineStart + mutationEnd);
+
   return MutatedLine(
     line,
     mutationStart,
@@ -251,9 +247,7 @@ class MutatedLine {
   }
 
   String _escapeChars(String text, bool doIt) {
-    if (doIt) {
-      return convertToMarkdown(text);
-    }
+    if (doIt) return convertToMarkdown(text);
     return text;
   }
 

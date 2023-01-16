@@ -73,9 +73,7 @@ class MutationProgressBar {
   }
 
   void _writeText(String text, bool newline) {
-    if (quiet) {
-      return;
-    }
+    if (quiet) return;
     if (verbose) {
       print(text);
     } else {
