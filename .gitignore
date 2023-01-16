@@ -7,3 +7,6 @@ build/
 .vscode
 .project
 .*project
+
+pubspec.lock
+/.idea/
