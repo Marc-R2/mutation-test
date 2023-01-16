@@ -12,21 +12,19 @@ abstract class Range {
 
 /// A range in the source file delimited by tokens.
 class TokenRange extends Range {
+  TokenRange(this.startToken, this.endToken);
+
   final String startToken;
   final String endToken;
-
-  TokenRange(this.startToken, this.endToken);
 
   /// Checks if [position] in [text] is inside an exclusion range
   /// defined by the start and end token in this instance.
   @override
   bool isInRange(String text, int position) {
-    var start = findFirstTokenBeforePosition(text, position, startToken);
-    if (start < 0) {
-      return false;
-    }
-    var shiftEnd = endToken.length - 1;
-    var end = findFirstTokenAfterPosition(text, start, endToken);
+    final start = findFirstTokenBeforePosition(text, position, startToken);
+    if (start < 0) return false;
+    final shiftEnd = endToken.length - 1;
+    final end = findFirstTokenAfterPosition(text, start, endToken);
     if (end < 0 || start >= end) {
       // check if the start of the new position might be the end token of previous range
       // it may be better to search exclusion zones from start of file ...
@@ -44,25 +42,25 @@ class TokenRange extends Range {
 
 /// A range in the source file delimited by line numbers.
 class LineRange extends Range {
-  final int start;
-  final int end;
 
   LineRange(this.start, this.end);
+  final int start;
+  final int end;
 
   /// Checks if [position] in [text] is inside an exclusion range
   /// defined by the start and end token in this instance.
   @override
   bool isInRange(String text, int position) {
-    var line = findLineFromPosition(text, position);
+    final line = findLineFromPosition(text, position);
     return start <= line && line <= end;
   }
 }
 
 /// A range in the source file defined by a regex (anyhting matching the regex is excluded).
 class RegexRange extends Range {
-  final RegExp pattern;
 
   RegexRange(this.pattern);
+  final RegExp pattern;
 
   /// Checks if [position] in [text] is inside an exclusion range
   /// defined by the start and end token in this instance.

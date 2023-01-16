@@ -2,14 +2,15 @@
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
 
+import 'dart:io';
+
+import 'package:mutation_test/src/commands.dart';
 import 'package:mutation_test/src/errors.dart';
+import 'package:mutation_test/src/html_reporter.dart';
 import 'package:mutation_test/src/mutations.dart';
-import 'package:mutation_test/src/version.dart';
 import 'package:mutation_test/src/ratings.dart';
 import 'package:mutation_test/src/string_helpers.dart';
-import 'package:mutation_test/src/html_reporter.dart';
-import 'package:mutation_test/src/commands.dart';
-import 'dart:io';
+import 'package:mutation_test/src/version.dart';
 
 /// Format for the report file
 enum ReportFormat {
@@ -31,6 +32,11 @@ enum ReportFormat {
 
 /// Holds the report data for a file.
 class FileMutationResults {
+  FileMutationResults(this.path, this.mutationCount, this.contents)
+      : undetectedMutations = [],
+        detectedMutations = [],
+        timeoutMutations = [];
+
   /// path to the file
   String path;
 
@@ -54,11 +60,6 @@ class FileMutationResults {
 
   /// dected mutations in this file
   List<MutatedLine> timeoutMutations;
-
-  FileMutationResults(this.path, this.mutationCount, this.contents)
-      : undetectedMutations = [],
-        detectedMutations = [],
-        timeoutMutations = [];
 
   bool lineHasUndetectedMutation(int i) {
     return _lineIsInList(undetectedMutations, i);
@@ -99,6 +100,13 @@ class FileMutationResults {
 /// It may create multiple folders in the output path depending on the selected report
 /// format.
 class ResultsReporter {
+  /// Creates a test runner and adds [inputFile] to the xml input file list.
+  /// [builtinRulesAdded] sets the flag in the report file when the builtin rules were added.
+  ResultsReporter(String inputFile, this.builtinRulesAdded) {
+    xmlFiles.add(inputFile);
+    _timer.start();
+  }
+
   /// statistics which command group caught how many mutations
   final Map<String, int> _groupStatistics = {};
 
@@ -113,13 +121,6 @@ class ResultsReporter {
 
   Duration get elapsed => _timer.elapsed;
 
-  /// Creates a test runner and adds [inputFile] to the xml input file list.
-  /// [builtinRulesAdded] sets the flag in the report file when the builtin rules were added.
-  ResultsReporter(String inputFile, this.builtinRulesAdded) {
-    xmlFiles.add(inputFile);
-    _timer.start();
-  }
-
   /// whether the builtin rules were added.
   final bool builtinRulesAdded;
 
@@ -130,7 +131,11 @@ class ResultsReporter {
   /// Adds the [test] report to the accumulated statistics.
   /// This method will print to the command line if [verbose] is true.
   void addTestReport(
-      String file, MutatedLine mutation, TestReport test, bool verbose) {
+    String file,
+    MutatedLine mutation,
+    TestReport test,
+    bool verbose,
+  ) {
     _totalRuns += 1;
     switch (test.result) {
       case TestResult.Timeout:
@@ -150,8 +155,11 @@ class ResultsReporter {
           print('Found mutation with ${test.command}');
         }
         if (test.command != null && test.command!.group.isNotEmpty) {
-          _groupStatistics.update(test.command!.group, (v) => v + 1,
-              ifAbsent: () => 1);
+          _groupStatistics.update(
+            test.command!.group,
+            (v) => v + 1,
+            ifAbsent: () => 1,
+          );
         }
         _totalFound += 1;
         if (testedFiles.containsKey(file)) {
@@ -218,7 +226,9 @@ class ResultsReporter {
     _groupStatistics
         .forEach((k, v) => print('  Group : $k, Found mutations: $v'));
     print(
-        '\nTotal tests: $_totalRuns\nUndetected Mutations: $undetectedMutations (${asPercentString(undetectedMutations, _totalRuns)})');
+      '\nTotal tests: $_totalRuns\nUndetected Mutations: $undetectedMutations '
+      '(${asPercentString(undetectedMutations, _totalRuns)})',
+    );
     print('Timeouts: $_totalTimeouts');
     print('Elapsed: $elapsed');
     print('Success: $success, Quality rating: $rating');
@@ -286,8 +296,7 @@ class ResultsReporter {
       }
       text += '</file>\n';
     });
-    text += '</undetected-mutations>\n';
-    return text;
+    return '$text</undetected-mutations>\n';
   }
 
   /// Writes the results of the tests to a xml file in directory [outpath].
@@ -315,7 +324,7 @@ class ResultsReporter {
   /// Writes the results of the tests to a markdown file in directory [outpath].
   /// The report will be named like the [input], but ending with "-report.md".
   void writeMarkdownReport(String outpath, String input) {
-    var text = createMarkdownReport();
+    final text = createMarkdownReport();
     final name = createReportFileName(_sanitizeInputFile(input), outpath, 'md');
     _createPathsAndWriteFile(name, text);
   }
@@ -323,16 +332,20 @@ class ResultsReporter {
   /// Writes the results of the tests to a html file in directory [outpath].
   /// The report will be named like the [input], but ending with "-report.html".
   void writeHTMLReport(String outpath, String input) {
-    var index = createToplevelHtmlFile(this);
-    var fname =
+    final index = createToplevelHtmlFile(this);
+    final fname =
         createReportFileName(_sanitizeInputFile(input), outpath, 'html');
     _createPathsAndWriteFile(fname, index);
     testedFiles.forEach((key, value) {
-      var contents = createSourceHtmlFile(this, value, basename(fname));
-      var sname = createReportFileName(key, outpath, 'html',
-          appendReport: false,
-          removeInputExt: false,
-          removePathsFromInput: false);
+      final contents = createSourceHtmlFile(this, value, basename(fname));
+      final sname = createReportFileName(
+        key,
+        outpath,
+        'html',
+        appendReport: false,
+        removeInputExt: false,
+        removePathsFromInput: false,
+      );
       _createPathsAndWriteFile(sname, contents);
     });
   }

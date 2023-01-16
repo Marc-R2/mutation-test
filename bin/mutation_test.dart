@@ -1,76 +1,101 @@
 /// Copyright 2021, domohuhn.
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
-
-import 'package:mutation_test/mutation_test.dart';
-import 'package:args/args.dart';
 import 'dart:io';
 
+import 'package:args/args.dart';
+import 'package:mutation_test/mutation_test.dart';
+
 void main(List<String> arguments) async {
-  final help = 'help';
-  final generateRules = 'generate-rules';
-  final show = 'show-example';
-  final rules = 'rules';
-  final builtin = 'builtin';
-  final verbose = 'verbose';
-  final version = 'version';
-  final about = 'about';
-  final dry = 'dry';
-  final output = 'output';
-  final format = 'format';
-  final quiet = 'quiet';
+  const help = 'help';
+  const generateRules = 'generate-rules';
+  const show = 'show-example';
+  const rules = 'rules';
+  const builtin = 'builtin';
+  const verbose = 'verbose';
+  const version = 'version';
+  const about = 'about';
+  const dry = 'dry';
+  const output = 'output';
+  const format = 'format';
+  const quiet = 'quiet';
 
   final parser = ArgParser()
-    ..addFlag(help,
-        abbr: 'h',
-        help: 'Displays a description of the program',
-        negatable: false)
-    ..addFlag(version,
-        help: 'Prints the version', negatable: false, defaultsTo: false)
-    ..addFlag(about,
-        help: 'Prints information about the application',
-        negatable: false,
-        defaultsTo: false)
-    ..addFlag(builtin,
-        abbr: 'b',
-        help: 'Add the builtin ruleset',
-        negatable: true,
-        defaultsTo: true)
-    ..addFlag(show,
-        abbr: 's',
-        help: 'Prints a XML file to the console with every possible option',
-        negatable: false)
-    ..addFlag(generateRules,
-        abbr: 'g',
-        help: 'Prints the builtin ruleset as XML string',
-        negatable: false)
-    ..addFlag(verbose,
-        abbr: 'v', help: 'Verbose output', negatable: false, defaultsTo: false)
-    ..addFlag(quiet,
-        abbr: 'q',
-        help: 'Suppress output to console. Overrides verbose.',
-        negatable: false,
-        defaultsTo: false)
-    ..addFlag(dry,
-        abbr: 'd',
-        help:
-            'Dry run - loads the configuration and counts the possible mutations in all files, but runs no tests',
-        negatable: false,
-        defaultsTo: false)
-    ..addOption(output,
-        abbr: 'o',
-        help: 'Sets the output directory',
-        valueHelp: 'directory',
-        defaultsTo: 'mutation-test-report')
-    ..addOption(format,
-        abbr: 'f',
-        help: 'Sets the report file format',
-        allowed: ['html', 'md', 'xml', 'all', 'none'],
-        defaultsTo: 'html')
-    ..addMultiOption(rules,
-        abbr: 'r',
-        help: 'Load the rules from the given XML Document',
-        valueHelp: 'path to XML file');
+    ..addFlag(
+      help,
+      abbr: 'h',
+      help: 'Displays a description of the program',
+      negatable: false,
+    )
+    ..addFlag(
+      version,
+      help: 'Prints the version',
+      negatable: false,
+    )
+    ..addFlag(
+      about,
+      help: 'Prints information about the application',
+      negatable: false,
+    )
+    ..addFlag(
+      builtin,
+      abbr: 'b',
+      help: 'Add the builtin ruleset',
+      defaultsTo: true,
+    )
+    ..addFlag(
+      show,
+      abbr: 's',
+      help: 'Prints a XML file to the console with every possible option',
+      negatable: false,
+    )
+    ..addFlag(
+      generateRules,
+      abbr: 'g',
+      help: 'Prints the builtin ruleset as XML string',
+      negatable: false,
+    )
+    ..addFlag(
+      verbose,
+      abbr: 'v',
+      help: 'Verbose output',
+      negatable: false,
+      defaultsTo: false,
+    )
+    ..addFlag(
+      quiet,
+      abbr: 'q',
+      help: 'Suppress output to console. Overrides verbose.',
+      negatable: false,
+      defaultsTo: false,
+    )
+    ..addFlag(
+      dry,
+      abbr: 'd',
+      help: 'Dry run - loads the configuration and '
+          'counts the possible mutations in all files, but runs no tests',
+      negatable: false,
+    )
+    ..addOption(
+      output,
+      abbr: 'o',
+      help: 'Sets the output directory',
+      valueHelp: 'directory',
+      defaultsTo: 'mutation-test-report',
+    )
+    ..addOption(
+      format,
+      abbr: 'f',
+      help: 'Sets the report file format',
+      allowed: ['html', 'md', 'xml', 'all', 'none'],
+      defaultsTo: 'html',
+    )
+    ..addMultiOption(
+      rules,
+      abbr: 'r',
+      help: 'Load the rules from the given XML Document',
+      valueHelp: 'path to XML file',
+    );
 
   late ArgResults argResults;
   try {
@@ -101,7 +126,7 @@ void main(List<String> arguments) async {
     exit(0);
   }
 
-  var reportFormatStr = argResults[format];
+  final reportFormatStr = argResults[format];
   var fmt = ReportFormat.NONE;
   if (reportFormatStr == 'html') {
     fmt = ReportFormat.HTML;
@@ -118,21 +143,25 @@ void main(List<String> arguments) async {
     printUsage(parser);
   }
 
-  var ruleDocuments = argResults[rules];
-  var isVerbose = argResults[verbose];
-  var isQuiet = argResults[quiet];
+  final ruleDocuments = argResults[rules] as List<String>;
+  final isQuiet = argResults[quiet] as bool;
+  final isVerbose = !isQuiet && argResults[verbose] as bool;
 
-  if (isQuiet) {
-    isVerbose = false;
-  }
-
-  var addBuiltin = (ruleDocuments.isNotEmpty &&
+  final addBuiltin = (ruleDocuments.isNotEmpty &&
           argResults.wasParsed(builtin) &&
-          argResults[builtin]) ||
-      (ruleDocuments.isEmpty && argResults[builtin]);
-  var mutations = MutationTest(
-      argResults.rest, argResults[output], isVerbose, argResults[dry], fmt,
-      ruleFiles: ruleDocuments, builtinRules: addBuiltin, quiet: isQuiet);
+          argResults[builtin] as bool) ||
+      (ruleDocuments.isEmpty && argResults[builtin] as bool);
+
+  final mutations = MutationTest(
+    argResults.rest,
+    argResults[output] as String,
+    isVerbose,
+    argResults[dry] as bool,
+    fmt,
+    ruleFiles: ruleDocuments,
+    builtinRules: addBuiltin,
+    quiet: isQuiet,
+  );
 
   ProcessSignal.sigint.watch().listen((signal) {
     print('\nReceived system interrupt!');
@@ -151,7 +180,7 @@ void main(List<String> arguments) async {
   exit(0);
 }
 
-void handleCommandLineError(var parser, [String errorMessage = '']) {
+void handleCommandLineError(ArgParser parser, [String errorMessage = '']) {
   if (errorMessage != '') {
     print('Error while parsing command line arguments:\n  $errorMessage');
   }
@@ -163,7 +192,7 @@ void handleProcessingError([String errorMessage = '']) {
   exit(1);
 }
 
-void printHelp(var parser) {
+void printHelp(ArgParser parser) {
   print('''
 Usage : mutation-test <options> <input xml or source files...>  
 A program that mutates your source code and verifies that the test commands
@@ -214,7 +243,7 @@ Options:''');
   print(parser.usage);
 }
 
-void printUsage(var parser, [int exitCode = 0]) {
+void printUsage(ArgParser parser, [int exitCode = 0]) {
   print('''
 Usage : mutation-test <options> <input xml or source files...>  
 Options:''');

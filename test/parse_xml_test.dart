@@ -28,51 +28,58 @@ void main() {
 
   test('Input error - wrong version', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_wrongVersion);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_wrongVersion),
+      throwsException,
+    );
   });
 
   test('Input error - lines', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noLineAttributes);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noLineAttributes),
+      throwsException,
+    );
   });
 
   test('Input error - token', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noTokenAttributes);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noTokenAttributes),
+      throwsException,
+    );
   });
 
   test('Input error - regex', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noRegexAttributes);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noRegexAttributes),
+      throwsException,
+    );
   });
 
   test('Input error - literal', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noLiteralAttributes);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noLiteralAttributes),
+      throwsException,
+    );
   });
 
   test('Input error - mutation', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noMutationAttributes);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noMutationAttributes),
+      throwsException,
+    );
   });
 
   test('Input error - no replacement rule', () {
     final configuration = Configuration(false, true);
-    expect(() {
-      configuration.parseXMLString(_noMutationChild);
-    }, throwsException);
+    expect(
+      () => configuration.parseXMLString(_noMutationChild),
+      throwsException,
+    );
   });
 
   test('Read from file', () {
@@ -82,9 +89,7 @@ void main() {
     expect(configuration.mutations.length, 0);
     expect(configuration.files.length, 1);
     expect(configuration.commands.length, 1);
-    expect(() {
-      configuration.validate();
-    }, throwsException);
+    expect(configuration.validate, throwsException);
   });
 
   test('Dart default rules', () {
@@ -101,8 +106,7 @@ void main() {
         '  <commands>\n'
         '    <command group="test" expected-return="0" working-directory="." timeout="60">dart test</command>\n'
         '  </commands>\n'
-        '</mutations>\n'
-        '');
+        '</mutations>\n');
   });
 }
 

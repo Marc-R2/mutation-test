@@ -1,10 +1,11 @@
 /// Copyright 2021, domohuhn.
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:mutation_test/src/commands.dart';
 import 'package:mutation_test/src/configuration.dart';
-import 'dart:io';
-import 'dart:convert';
 
 /// Runs the tests for mutations and stores the results.
 class TestRunner {
@@ -12,10 +13,12 @@ class TestRunner {
   ///
   /// The method will report aggregate of the result in and some other data.
   /// If [outputOnFailure] is true, the complete command output will be printed in case of failure.
-  Future<TestReport> run(Configuration config,
-      {bool outputOnFailure = false}) async {
+  Future<TestReport> run(
+    Configuration config, {
+    bool outputOnFailure = false,
+  }) async {
     for (final cmd in config.commands) {
-      var result = await _start(cmd, outputOnFailure: outputOnFailure);
+      final result = await _start(cmd, outputOnFailure: outputOnFailure);
       if (result != TestResult.Undetected) {
         return TestReport(result, command: cmd);
       }
@@ -26,34 +29,42 @@ class TestRunner {
   /// Starts the process and checks its results.
   Future<TestResult> _start(Command cmd, {bool outputOnFailure = false}) async {
     var timedout = false;
-    var stopwatch = Stopwatch();
+    final stopwatch = Stopwatch();
     stopwatch.start();
-    var future = await Process.start(cmd.command, cmd.arguments,
-        workingDirectory: cmd.directory);
+    final future = await Process.start(
+      cmd.command,
+      cmd.arguments,
+      workingDirectory: cmd.directory,
+    );
     _pid = future.pid;
     var stdout = '';
-    var moo1 =
-        future.stdout.transform(Utf8Decoder(allowMalformed: true)).forEach((e) {
+    final moo1 = future.stdout
+        .transform(const Utf8Decoder(allowMalformed: true))
+        .forEach((e) {
       stdout += e;
     });
     var stderr = '';
-    var moo2 =
-        future.stderr.transform(Utf8Decoder(allowMalformed: true)).forEach((e) {
+    final moo2 = future.stderr
+        .transform(const Utf8Decoder(allowMalformed: true))
+        .forEach((e) {
       stderr += e;
     });
 
     var exitfuture = future.exitCode;
     if (cmd.timeout != null) {
-      exitfuture = exitfuture.timeout(cmd.timeout!, onTimeout: () {
-        print(
-            'Command time out after: ${stopwatch.elapsed}! Killing process with pid: ${future.pid}.');
-        future.kill(ProcessSignal.sigterm);
-        timedout = true;
-        return -1;
-      });
+      exitfuture = exitfuture.timeout(
+        cmd.timeout!,
+        onTimeout: () {
+          print('Command time out after: ${stopwatch.elapsed}! '
+              'Killing process with pid: ${future.pid}.');
+          future.kill();
+          timedout = true;
+          return -1;
+        },
+      );
     }
 
-    var exitCode = await exitfuture;
+    final exitCode = await exitfuture;
     await moo1;
     await moo2;
 
@@ -61,7 +72,9 @@ class TestRunner {
     if (outputOnFailure && (!matchesExpectation || timedout)) {
       print('FAILED: $cmd');
       print(
-          'Timeout: $timedout (elapsed time: ${stopwatch.elapsed} - exit code may be wrong on timeout)');
+        'Timeout: $timedout (elapsed time: ${stopwatch.elapsed} - '
+        'exit code may be wrong on timeout)',
+      );
       print('Exit code: $exitCode (expected ${cmd.expectedReturnValue})');
       print('stdout: "$stdout"');
       print('stderr: "$stderr"');

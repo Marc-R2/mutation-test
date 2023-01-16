@@ -6,17 +6,20 @@ import 'package:mutation_test/src/errors.dart';
 
 /// Renders a progress bar as string.
 class ProgressBar {
-  ProgressBar(this.maximum,
-      {this.width = 30,
-      this.widthIncludesText = true,
-      this.showPercent = true,
-      this.showTotal = true,
-      this.totalSuffix = '',
-      this.left = '[',
-      this.right = ']',
-      this.bar = '=',
-      this.blank = ' ',
-      this.partial = '>'});
+  ProgressBar(
+    this.maximum, {
+    this.width = 30,
+    this.widthIncludesText = true,
+    this.showPercent = true,
+    this.showTotal = true,
+    this.totalSuffix = '',
+    this.left = '[',
+    this.right = ']',
+    this.bar = '=',
+    this.blank = ' ',
+    this.partial = '>',
+  });
+
   int current = 0;
   int maximum;
   int width;
@@ -40,7 +43,7 @@ class ProgressBar {
   @override
   String toString() {
     var rv = left;
-    var percent = 100 * progress;
+    final percent = 100 * progress;
 
     var suffix = right;
     var textLength = rv.length + suffix.length;
@@ -49,7 +52,7 @@ class ProgressBar {
       textLength += 4;
     }
     if (showTotal) {
-      var tmp = current != maximum
+      final tmp = current != maximum
           ? ' ($current/$maximum$totalSuffix)'
           : ' ($maximum$totalSuffix)';
       textLength += tmp.length;
@@ -57,7 +60,8 @@ class ProgressBar {
     }
     if (widthIncludesText && textLength >= width) {
       throw MutationError(
-          'Progress bar is too small! width: $width text width: $textLength');
+        'Progress bar is too small! width: $width text width: $textLength',
+      );
     }
     final space = widthIncludesText
         ? width - textLength
@@ -75,10 +79,8 @@ class ProgressBar {
     } else {
       rv += bar * lower;
     }
-    var rest = space - lower;
-    if (rest > 0) {
-      rv += blank * rest;
-    }
+    final rest = space - lower;
+    if (rest > 0) rv += blank * rest;
     return rv + suffix;
   }
 }

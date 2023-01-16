@@ -1,23 +1,21 @@
 /// Copyright 2021, domohuhn.
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
+import 'dart:io';
 
 import 'package:mutation_test/src/range.dart';
 import 'package:test/test.dart';
-import 'dart:io';
 
 void main() {
-  var text1 = 'smoe\nthing/**s\n*f\nsdf */*x;\n';
-  var text2 = 'smoe\nthing// comment ad\n*x;\n';
-  var text3 = 'ghbh\nfor(asd;sdf;sd++){\n*x;\n';
-  var exclusion1 = TokenRange('/*', '*/');
-  var exclusion2 = TokenRange('//', '\n');
-  var exclusion3 = LineRange(2, 3);
-  var exclusion4 = RegexRange(RegExp(r'\/[*].*?[*]\/', dotAll: true));
-  var exclusion5 = RegexRange(RegExp(
-    r'//.*\n',
-  ));
-  var exclusion6 = RegexRange(RegExp(r'[\s]for[\s]*\([\s\S].*?\)[\s]*{'));
+  const text1 = 'smoe\nthing/**s\n*f\nsdf */*x;\n';
+  const text2 = 'smoe\nthing// comment ad\n*x;\n';
+  const text3 = 'ghbh\nfor(asd;sdf;sd++){\n*x;\n';
+  final exclusion1 = TokenRange('/*', '*/');
+  final exclusion2 = TokenRange('//', '\n');
+  final exclusion3 = LineRange(2, 3);
+  final exclusion4 = RegexRange(RegExp(r'\/[*].*?[*]\/', dotAll: true));
+  final exclusion5 = RegexRange(RegExp(r'//.*\n'));
+  final exclusion6 = RegexRange(RegExp(r'[\s]for[\s]*\([\s\S].*?\)[\s]*{'));
 
   test('exclusion multiline 1', () {
     for (var i = 0; i < text1.length; i++) {

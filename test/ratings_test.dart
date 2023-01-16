@@ -7,14 +7,14 @@ import 'package:test/test.dart';
 
 void main() {
   test('Rating - Empty ', () {
-    var ratings = Ratings();
+    final ratings = Ratings();
     expect(ratings.isSuccessful(100.0), true);
     expect(ratings.isSuccessful(99.999), false);
     expect(ratings.rating(100.0), 'N/A');
   });
 
   test('Rating - Threshold', () {
-    var ratings = Ratings();
+    final ratings = Ratings();
     ratings.failure = 50.0;
     expect(ratings.isSuccessful(100.0), true);
     expect(ratings.isSuccessful(51.0), true);
@@ -22,7 +22,7 @@ void main() {
   });
 
   test('Rating - get rating', () {
-    var ratings = Ratings();
+    final ratings = Ratings();
     ratings.addRating(0.0, 'F');
     ratings.addRating(100.0, 'A');
     ratings.addRating(80.0, 'B');
@@ -38,7 +38,7 @@ void main() {
   });
 
   test('Rating - sanitize', () {
-    var ratings = Ratings();
+    final ratings = Ratings();
     ratings.sanitize();
     expect(ratings.rating(100.0), 'A');
     expect(ratings.rating(85.0), 'B');
@@ -51,7 +51,7 @@ void main() {
   });
 
   test('Rating - dont sanitize', () {
-    var ratings = Ratings();
+    final ratings = Ratings();
     ratings.failure = 50;
     ratings.sanitize();
     expect(ratings.rating(100.0), 'N/A');

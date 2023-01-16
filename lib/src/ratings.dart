@@ -59,7 +59,8 @@ class Ratings {
 }
 
 class _Limit {
+  _Limit(this.lowerBoundary, this.name);
+
   double lowerBoundary;
   String name;
-  _Limit(this.lowerBoundary, this.name);
 }

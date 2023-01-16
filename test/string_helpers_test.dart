@@ -5,7 +5,8 @@ import 'package:mutation_test/src/string_helpers.dart';
 import 'package:test/test.dart';
 
 void main() {
-  var text = '''  This is a long string.
+  const text = '''
+  This is a long string.
   Another line.
   More!
   MORE!
@@ -26,38 +27,38 @@ void main() {
   });
 
   test('report file name', () {
-    var moo = createReportFileName('input.cpp', 'output', 'html');
+    final moo = createReportFileName('input.cpp', 'output', 'html');
     expect(moo, 'output/input-report.html');
   });
 
   test('report file name forwardslash', () {
-    var moo = createReportFileName('before/input.cpp', 'output', 'html');
+    final moo = createReportFileName('before/input.cpp', 'output', 'html');
     expect(moo, 'output/input-report.html');
   });
 
   test('report file name backslash', () {
-    var moo = createReportFileName('before\\input.cpp', 'output', 'html');
+    final moo = createReportFileName(r'before\input.cpp', 'output', 'html');
     expect(moo, 'output/input-report.html');
   });
 
   test('percent string', () {
-    var moo = asPercentString(25, 100);
+    final moo = asPercentString(25, 100);
     expect(moo, '25.00%');
   });
 
   test('convert to xml', () {
-    var moo = convertToXML('<&"\'>');
+    final moo = convertToXML('<&"\'>');
     expect(moo, '&lt;&amp;&quot;&apos;&gt;');
   });
 
   test('formatDuration', () {
-    var moo = formatDuration(Duration(hours: 1));
+    final moo = formatDuration(const Duration(hours: 1));
     expect(moo, '1h 0m 0s');
   });
 
   test('convertToMarkdown', () {
-    var moo = convertToMarkdown('*');
-    expect(moo, '\\*');
+    final moo = convertToMarkdown('*');
+    expect(moo, r'\*');
   });
 
   test('get directory forwardslash', () {
@@ -67,28 +68,32 @@ void main() {
   });
   test('get directory backslash', () {
     expect(getDirectory('somefile.cpp'), '');
-    expect(getDirectory('path\\somefile.cpp'), 'path\\');
-    expect(
-        getDirectory('more\\dirs\\path\\somefile.cpp'), 'more\\dirs\\path\\');
+    expect(getDirectory(r'path\somefile.cpp'), r'path\');
+    expect(getDirectory(r'more\dirs\path\somefile.cpp'), r'more\dirs\path\');
   });
 
   test('create link prefix', () {
     expect(createParentLinkPrefix('somefile.cpp'), './');
     expect(createParentLinkPrefix('path/somefile.cpp'), '../');
     expect(createParentLinkPrefix('more/dirs/path/somefile.cpp'), '../../../');
-    expect(createParentLinkPrefix('path\\somefile.cpp'), '../');
-    expect(
-        createParentLinkPrefix('more\\dirs\\path\\somefile.cpp'), '../../../');
+    expect(createParentLinkPrefix(r'path\somefile.cpp'), '../');
+    expect(createParentLinkPrefix(r'more\dirs\path\somefile.cpp'), '../../../');
   });
 
   test('report file name 2', () {
-    var moo = createReportFileName('input.cpp', 'output', 'html',
-        removeInputExt: false);
+    final moo = createReportFileName(
+      'input.cpp',
+      'output',
+      'html',
+      removeInputExt: false,
+    );
     expect(moo, 'output/input.cpp-report.html');
   });
 
   test('Escape html chars', () {
-    expect(escapeCharsForHtml('aa < bb && cc > dd'),
-        'aa &lt; bb &amp;&amp; cc &gt; dd');
+    expect(
+      escapeCharsForHtml('aa < bb && cc > dd'),
+      'aa &lt; bb &amp;&amp; cc &gt; dd',
+    );
   });
 }

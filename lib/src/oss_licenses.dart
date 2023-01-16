@@ -11,7 +11,8 @@ const ossLicenses = <Package>[
         'https://github.com/dart-lang/sdk/tree/main/pkg/_fe_analyzer_shared',
     authors: [],
     version: '51.0.0',
-    license: '''Copyright 2019, the Dart project authors.
+    license: '''
+Copyright 2019, the Dart project authors.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -1943,6 +1944,19 @@ SOFTWARE.''',
 
 /// Package license definition.
 class Package {
+  const Package({
+    required this.name,
+    required this.description,
+    this.homepage,
+    this.repository,
+    required this.authors,
+    required this.version,
+    this.license,
+    required this.isMarkdown,
+    required this.isSdk,
+    required this.isDirectDependency,
+  });
+
   /// Package name
   final String name;
 
@@ -1972,17 +1986,4 @@ class Package {
 
   /// Whether the package is direct dependency or not.
   final bool isDirectDependency;
-
-  const Package({
-    required this.name,
-    required this.description,
-    this.homepage,
-    this.repository,
-    required this.authors,
-    required this.version,
-    this.license,
-    required this.isMarkdown,
-    required this.isSdk,
-    required this.isDirectDependency,
-  });
 }

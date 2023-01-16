@@ -11,8 +11,9 @@ abstract class Replacement {
 
 /// Implements a literal text replacement.
 class LiteralReplacement extends Replacement {
-  final String _text;
   LiteralReplacement(this._text);
+
+  final String _text;
 
   /// Replaces the [match] in [text] and returns a copy.
   /// The text of the match is removed and replaced by the contents of this class.
@@ -24,21 +25,23 @@ class LiteralReplacement extends Replacement {
 
 /// Just a simple data structure
 class RegexGroup {
+  RegexGroup(this.start, this.end, this.index);
+
   int start;
   int end;
   int index;
-  RegexGroup(this.start, this.end, this.index);
 }
 
 /// Implements a text replacement that will also replace the tokens $1, $2, $3, ... with the groups found in the regular expression match.
 class RegexReplacement extends Replacement {
-  String _text;
-  final List<RegexGroup> _groups = [];
   RegexReplacement(this._text) {
     _findGroups();
     _removeEscapeSequences();
     _validate();
   }
+
+  String _text;
+  final List<RegexGroup> _groups = [];
 
   /// Validates that the replacements were all ok.
   void _validate() {
@@ -46,11 +49,16 @@ class RegexReplacement extends Replacement {
     for (final grp in _groups) {
       if (lastEnd > grp.start) {
         throw MutationError(
-            'Internal error - there should never be overlapping replacement groups! Group: index ${grp.index} in [${grp.start},${grp.end}] overlaps $lastEnd');
+          'Internal error - there should never be overlapping replacement '
+          'groups! Group: index ${grp.index} in '
+          '[${grp.start},${grp.end}] overlaps $lastEnd',
+        );
       }
       if (!(grp.start < _text.length && grp.end <= _text.length)) {
         throw MutationError(
-            'Internal error - group outside string! Group: index ${grp.index} in [${grp.start},${grp.end}] outside of ${_text.length}');
+          'Internal error - group outside string! Group: index ${grp.index} '
+          'in [${grp.start},${grp.end}] outside of ${_text.length}',
+        );
       }
       lastEnd = grp.end;
     }
@@ -103,13 +111,14 @@ class RegexReplacement extends Replacement {
 
   /// Finds the positions and indices of the groups in the given replacement pattern.
   void _findGroups() {
-    var pattern = RegExp(r'(^|[^\\]|[\\][\\])[$]([0-9]+)');
+    final pattern = RegExp(r'(^|[^\\]|[\\][\\])[$]([0-9]+)');
     for (final m in pattern.allMatches(_text)) {
-      var prefix = m.group(1);
-      var grp = m.group(2);
+      final prefix = m.group(1);
+      final grp = m.group(2);
       if (prefix == null || grp == null) {
         throw MutationError(
-            'Internal error - matched group without number. This should not happen!');
+          'Internal error - matched group without number. This should not happen!',
+        );
       }
       _groups.add(RegexGroup(m.start + prefix.length, m.end, int.parse(grp)));
     }
@@ -120,7 +129,9 @@ class RegexReplacement extends Replacement {
     for (final grp in _groups) {
       if (grp.start <= position && position < grp.end) {
         throw MutationError(
-            'Internal error - groups should not be modified! $position is in [${grp.start}, ${grp.end}]');
+          'Internal error - groups should not be modified! '
+          '$position is in [${grp.start}, ${grp.end}]',
+        );
       }
       if (grp.start > position) {
         grp.start -= 1;
@@ -139,11 +150,13 @@ class RegexReplacement extends Replacement {
     var shift = 0;
     try {
       for (final grp in _groups) {
-        var repl = match.group(grp.index);
+        final repl = match.group(grp.index);
 
         if (repl == null) {
           throw MutationError(
-              'RegEx mutation "$_text" requires groups! ${grp.index} not present!');
+            'RegEx mutation "$_text" requires groups! '
+            '${grp.index} not present!',
+          );
         }
         tmp = tmp.substring(0, grp.start + shift) +
             repl +
@@ -152,7 +165,9 @@ class RegexReplacement extends Replacement {
       }
     } catch (e) {
       throw MutationError(
-          'RegEx mutation "$_text" requires groups! Pattern only has ${match.groupCount} groups!  ${e.toString()}');
+        'RegEx mutation "$_text" requires groups! '
+        'Pattern only has ${match.groupCount} groups!  ${e.toString()}',
+      );
     }
     return text.substring(0, match.start) + tmp + text.substring(match.end);
   }

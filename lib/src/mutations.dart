@@ -2,32 +2,37 @@
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
 
-import 'package:mutation_test/src/string_helpers.dart';
-import 'package:mutation_test/src/replacements.dart';
 import 'package:mutation_test/src/range.dart';
+import 'package:mutation_test/src/replacements.dart';
+import 'package:mutation_test/src/string_helpers.dart';
 
 /// A possible mutation of the source file.
 ///
 /// Each occurence of the pattern will be replaced by one of the replacements and then the test commands are run
 /// to check if the mutation is detected.
 class Mutation {
+  Mutation(this.pattern);
+
   final Pattern pattern;
   final List<Replacement> replacements = [];
-
-  Mutation(this.pattern);
 
   /// Iterate through [text] and replaces all matches of the pattern with every replacement.
   /// Only one match is mutated at a time and replaced with a single replacement.
   IterableMutation allMutations(
-      String text, List<Range> whitelist, List<Range> exclusions) {
+    String text,
+    List<Range> whitelist,
+    List<Range> exclusions,
+  ) {
     return IterableMutation(
-        MutationIterator(this, text, whitelist, exclusions));
+      MutationIterator(this, text, whitelist, exclusions),
+    );
   }
 }
 
 /// Wrapper to allow iteration
 class IterableMutation extends Iterable<MutatedCode> {
   IterableMutation(this._itr);
+
   final Iterator<MutatedCode> _itr;
 
   @override
@@ -36,12 +41,13 @@ class IterableMutation extends Iterable<MutatedCode> {
 
 /// Wrapper for the return value of the iterator.
 class MutatedCode {
+  MutatedCode(this.text, this.line);
+
   /// The full content of the mutated file
   String text;
 
   /// Information about the mutated line.
   MutatedLine line;
-  MutatedCode(this.text, this.line);
 }
 
 /// Iterator for all mutations in a given text.
@@ -81,20 +87,28 @@ class MutationIterator implements Iterator<MutatedCode> {
     }
     _currentMutation.text =
         mutation.replacements[_index].replace(text, _matches.current);
-    _currentMutation.line = createMutatedLine(_matches.current.start,
-        _matches.current.end, text, _currentMutation.text);
+    _currentMutation.line = createMutatedLine(
+      _matches.current.start,
+      _matches.current.end,
+      text,
+      _currentMutation.text,
+    );
     _index += 1;
     return true;
   }
 }
 
 /// Checks if a [position] in [text] is inside the whitelists or if it is excluded.
-bool isPositionOk(List<Range> whitelist, List<Range> exclusions, String text,
-    Match position) {
-  var whitelisted = whitelist.isEmpty ||
+bool isPositionOk(
+  List<Range> whitelist,
+  List<Range> exclusions,
+  String text,
+  Match position,
+) {
+  final whitelisted = whitelist.isEmpty ||
       (isInRange(whitelist, text, position.start) &&
           isInRange(whitelist, text, position.end));
-  var blacklisted = isInRange(exclusions, text, position.start) ||
+  final blacklisted = isInRange(exclusions, text, position.start) ||
       isInRange(exclusions, text, position.end);
   return whitelisted && !blacklisted;
 }
@@ -111,7 +125,11 @@ bool isInRange(List<Range> ranges, String text, int position) {
 
 /// Adds a mutation to the Testrunner.
 MutatedLine createMutatedLine(
-    int absoluteStart, int absoluteEnd, String original, String mutated) {
+  int absoluteStart,
+  int absoluteEnd,
+  String original,
+  String mutated,
+) {
   if (absoluteStart < 0) {
     absoluteStart = 0;
   }
@@ -138,15 +156,22 @@ MutatedLine createMutatedLine(
   final lineEndMutated =
       findEndOfLineFromPosition(mutated, lineStart + mutationEnd);
   return MutatedLine(
-      line,
-      mutationStart,
-      mutationEnd,
-      original.substring(lineStart, lineEnd),
-      mutated.substring(lineStart, lineEndMutated));
+    line,
+    mutationStart,
+    mutationEnd,
+    original.substring(lineStart, lineEnd),
+    mutated.substring(lineStart, lineEndMutated),
+  );
 }
 
 /// A mutation data structure with Information about a mutated line.
 class MutatedLine {
+  MutatedLine(this.line, int first, int last, this.original, this.mutated) {
+    /// make wrong states impossible to repesent
+    start = first >= 0 ? first : 0;
+    end = last <= original.length ? last : original.length;
+  }
+
   /// line number in the source
   final int line;
 
@@ -161,12 +186,6 @@ class MutatedLine {
 
   /// mutated line of code
   final String mutated;
-
-  MutatedLine(this.line, int first, int last, this.original, this.mutated) {
-    /// make wrong states impossible to repesent
-    start = first >= 0 ? first : 0;
-    end = last <= original.length ? last : original.length;
-  }
 
   /// Pretty formatting
   String toMarkdown() {

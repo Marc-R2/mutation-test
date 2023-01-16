@@ -4,9 +4,10 @@
 
 /// A simple exception for any error.
 class MutationError implements Exception {
+  MutationError(this.cause);
+
   /// cause of the error
   String cause;
-  MutationError(this.cause);
 
   @override
   String toString() {

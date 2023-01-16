@@ -12,13 +12,13 @@ executables:
   mutation_test:
 
 dependencies:
-  args: ^2.3.0
-  xml: ^6.0.0
+  args: ^2.3.1
+  xml: ^6.2.2
 
 dev_dependencies:
-  lints: ^2.0.0
-  flutter_oss_licenses: ^2.0.0+1
-  test: ^1.16.0
+  flutter_oss_licenses: ^2.0.1
+  test: ^1.22.2
+  very_good_analysis: ^3.1.0
 
 platforms:
   linux:

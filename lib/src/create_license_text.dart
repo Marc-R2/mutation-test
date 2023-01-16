@@ -9,10 +9,8 @@ import 'package:mutation_test/src/oss_licenses.dart';
 /// for the used packages.
 String createLicenseText() {
   var rv = _selfLicense();
-  var ext = ossLicenses;
-  if (ext.isEmpty) {
-    return rv;
-  }
+  const ext = ossLicenses;
+  if (ext.isEmpty) return rv;
   rv +=
       '\n\n-------------------------------------------------------------------------------\nAdditional licenses:\n\n';
   for (final value in ext) {

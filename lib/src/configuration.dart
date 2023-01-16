@@ -1,33 +1,27 @@
 /// Copyright 2021, domohuhn.
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
+
 import 'dart:io';
-import 'package:xml/xml.dart' as xml;
-import 'package:mutation_test/src/mutations.dart';
-import 'package:mutation_test/src/replacements.dart';
+
 import 'package:mutation_test/src/commands.dart';
 import 'package:mutation_test/src/errors.dart';
+import 'package:mutation_test/src/mutations.dart';
 import 'package:mutation_test/src/range.dart';
 import 'package:mutation_test/src/ratings.dart';
+import 'package:mutation_test/src/replacements.dart';
+import 'package:xml/xml.dart' as xml;
 
 /// A structure holding the information about the mutation input.
 class TargetFile {
+  TargetFile(this.path, this.whitelist);
+
   String path;
   List<Range> whitelist;
-  TargetFile(this.path, this.whitelist);
 }
 
 /// Reads the xml configuration file
 class Configuration {
-  List<TargetFile> files;
-  List<Mutation> mutations;
-  List<Command> commands;
-  List<Range> exclusions;
-  Ratings ratings;
-  bool toplevelFound = false;
-  bool verbose;
-  bool dry;
-
   Configuration(this.verbose, this.dry)
       : files = [],
         mutations = [],
@@ -45,12 +39,19 @@ class Configuration {
     addRulesFromFile(path);
   }
 
+  List<TargetFile> files;
+  List<Mutation> mutations;
+  List<Command> commands;
+  List<Range> exclusions;
+  Ratings ratings;
+  bool toplevelFound = false;
+  bool verbose;
+  bool dry;
+
   /// Add all rules from [path]
   void addRulesFromFile(String path) {
-    if (verbose) {
-      print('Processing $path');
-    }
-    var file = File(path);
+    if (verbose) print('Processing $path');
+    final file = File(path);
     final contents = file.readAsStringSync();
     parseXMLString(contents);
   }
@@ -58,7 +59,7 @@ class Configuration {
   /// Parses an XML string with the given [contents]
   void parseXMLString(String contents) {
     final document = xml.XmlDocument.parse(contents);
-    for (var element in document.findAllElements('mutations')) {
+    for (final element in document.findAllElements('mutations')) {
       _processTopLevel(element);
     }
     if (!toplevelFound) {
@@ -79,11 +80,12 @@ class Configuration {
   }
 
   void _processTopLevel(xml.XmlElement root) {
-    var str = root.getAttribute('version');
+    final str = root.getAttribute('version');
     toplevelFound = true;
     if (str == null) {
       throw MutationError(
-          'No version attribute found in xml element <mutations>!');
+        'No version attribute found in xml element <mutations>!',
+      );
     }
     if (double.parse(str) != 1.0) {
       throw MutationError('Configuration file version not supported!');
@@ -128,15 +130,19 @@ class Configuration {
     });
     if (verbose) {
       print(
-          ' ${commands.length} commands will be executed to detect mutations');
+        ' ${commands.length} commands will be executed to detect mutations',
+      );
     }
 
     _processXMLNode(root, 'threshold', _parseThreshold);
   }
 
   void _processXMLNode(
-      xml.XmlElement root, String type, void Function(xml.XmlElement) functor) {
-    for (var element in root.findAllElements(type)) {
+    xml.XmlElement root,
+    String type,
+    void Function(xml.XmlElement) functor,
+  ) {
+    for (final element in root.findAllElements(type)) {
       functor(element);
     }
   }
@@ -146,7 +152,7 @@ class Configuration {
     if (!File(path).existsSync()) {
       throw MutationError('Input file "$path" not found!');
     }
-    var whitelist = <Range>[];
+    final whitelist = <Range>[];
     _processXMLNode(element, 'lines', (el) {
       whitelist.add(_parseLineRange(el));
     });
@@ -158,21 +164,22 @@ class Configuration {
     if (!Directory(path).existsSync()) {
       throw MutationError('Input directory "$path" not found!');
     }
-    var recurseStr = element.getAttribute('recursive');
-    var recurse = recurseStr != null && recurseStr == 'true';
-    List<RegExp> patterns = [];
+    final recurseStr = element.getAttribute('recursive');
+    final recurse = recurseStr != null && recurseStr == 'true';
+    final patterns = <RegExp>[];
     _processXMLNode(element, 'matching', (el) {
-      var pat = el.getAttribute('pattern');
+      final pat = el.getAttribute('pattern');
       if (pat == null) {
         throw MutationError(
-            '<matching> tokens must have a pattern as attribute!');
+          '<matching> tokens must have a pattern as attribute!',
+        );
       }
       patterns.add(RegExp(pat));
     });
-    var tree = Directory(path).listSync(recursive: recurse);
-    for (var f in tree) {
+    final tree = Directory(path).listSync(recursive: recurse);
+    for (final f in tree) {
       if (patterns.isNotEmpty) {
-        for (var pat in patterns) {
+        for (final pat in patterns) {
           if (pat.hasMatch(f.path) && f is! Link) {
             files.add(TargetFile(f.path, []));
           }
@@ -186,20 +193,23 @@ class Configuration {
   void _parseThreshold(xml.XmlElement element) {
     if (ratings.initialized) {
       throw MutationError(
-          'There must be only one <threshold> element in the inputs!');
+        'There must be only one <threshold> element in the inputs!',
+      );
     }
-    var failure = element.getAttribute('failure');
+    final failure = element.getAttribute('failure');
     if (failure == null) {
       throw MutationError('<threshold> needs attribute "failure"');
     }
     ratings.failure = double.parse(failure);
 
     _processXMLNode(element, 'rating', (el) {
-      var lowerbound = el.getAttribute('over');
-      var name = el.getAttribute('name');
+      final lowerbound = el.getAttribute('over');
+      final name = el.getAttribute('name');
       if (lowerbound == null || name == null) {
         throw MutationError(
-            '<rating> needs attributes "over" and "name" - got $lowerbound, $name');
+          '<rating> needs attributes "over" '
+          'and "name" - got $lowerbound, $name',
+        );
       }
       ratings.addRating(double.parse(lowerbound), name);
     });
@@ -212,27 +222,23 @@ class Configuration {
   void _addTokenRange(xml.XmlElement element) {
     var begin = element.getAttribute('begin');
     var end = element.getAttribute('end');
+
     if (begin == null || end == null) {
       throw MutationError('Every <token> needs a begin and end attribute!');
     }
-    if (begin == '\\n') {
-      begin = '\n';
-    }
-    if (end == '\\n') {
-      end = '\n';
-    }
-    if (begin == '\\t') {
-      begin = '\t';
-    }
-    if (end == '\\t') {
-      end = '\t';
-    }
+
+    if (begin == r'\n') begin = '\n';
+    if (end == r'\n') end = '\n';
+
+    if (begin == r'\t') begin = '\t';
+    if (end == r'\t') end = '\t';
+
     exclusions.add(TokenRange(begin, end));
   }
 
   LineRange _parseLineRange(xml.XmlElement element) {
-    var begin = element.getAttribute('begin');
-    var end = element.getAttribute('end');
+    final begin = element.getAttribute('begin');
+    final end = element.getAttribute('end');
     if (begin == null || end == null) {
       throw MutationError('Every <lines> needs a begin and end attribute!');
     }
@@ -244,18 +250,18 @@ class Configuration {
   }
 
   RegExp _parseRegEx(xml.XmlElement element) {
-    var pattern = element.getAttribute('pattern');
+    final pattern = element.getAttribute('pattern');
     if (pattern == null) {
       throw MutationError('Every <regex> needs a pattern!');
     }
-    var tmp = element.getAttribute('dotAll');
-    var dotMatchesNewlines = tmp != null && tmp == 'true';
+    final tmp = element.getAttribute('dotAll');
+    final dotMatchesNewlines = tmp != null && tmp == 'true';
     return RegExp(pattern, multiLine: true, dotAll: dotMatchesNewlines);
   }
 
   /// Parses a <command> token from [element] and adds it to the interal structure.
   void _addCommand(xml.XmlElement element) {
-    var text = element.text.split(' ');
+    final text = element.text.split(' ');
     if (text.isEmpty) {
       throw MutationError('Received empty text for a <command>');
     }
@@ -282,13 +288,13 @@ class Configuration {
 
   /// Adds a literal text replacement rule from [element]
   void _addLiteralRule(xml.XmlElement element) {
-    var str = element.getAttribute('text');
+    final str = element.getAttribute('text');
     if (str == null) {
       throw MutationError('Each <literal> must have a text attribute!');
     }
-    var mutation = Mutation(str);
-    for (var child in element.findAllElements('mutation')) {
-      var replacement = child.getAttribute('text');
+    final mutation = Mutation(str);
+    for (final child in element.findAllElements('mutation')) {
+      final replacement = child.getAttribute('text');
       if (replacement == null) {
         throw MutationError('Each <mutation> must have a text attribute!');
       }
@@ -296,16 +302,17 @@ class Configuration {
     }
     if (mutation.replacements.isEmpty) {
       throw MutationError(
-          'Each <literal> rule must have at least one <mutation> child!');
+        'Each <literal> rule must have at least one <mutation> child!',
+      );
     }
     mutations.add(mutation);
   }
 
   /// Adds a regular expression text replacement rule from [element]
   void _addRegexRule(xml.XmlElement element) {
-    var mutation = Mutation(_parseRegEx(element));
-    for (var child in element.findAllElements('mutation')) {
-      var replacement = child.getAttribute('text');
+    final mutation = Mutation(_parseRegEx(element));
+    for (final child in element.findAllElements('mutation')) {
+      final replacement = child.getAttribute('text');
       if (replacement == null) {
         throw MutationError('Each <mutation> must have a text attribute!');
       }
@@ -313,7 +320,8 @@ class Configuration {
     }
     if (mutation.replacements.isEmpty) {
       throw MutationError(
-          'Each <regex> rule must have at least one <mutation> child!');
+        'Each <regex> rule must have at least one <mutation> child!',
+      );
     }
     mutations.add(mutation);
   }

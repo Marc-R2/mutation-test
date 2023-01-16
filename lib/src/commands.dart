@@ -6,6 +6,8 @@
 ///
 /// The return value of the command is checked against the expectedReturnValue to determine success.
 class Command {
+  Command(this.original, this.command, this.arguments);
+
   String group = '';
   String? directory;
   int expectedReturnValue = 0;
@@ -13,8 +15,6 @@ class Command {
   final String original;
   final String command;
   final List<String> arguments;
-
-  Command(this.original, this.command, this.arguments);
 
   @override
   String toString() {
@@ -28,6 +28,7 @@ enum TestResult { Timeout, Detected, Undetected }
 /// A report after running a test command.
 class TestReport {
   TestReport(this.result, {this.command});
+
   TestResult result;
   Command? command;
 }
