@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  color: black;
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+
+.hit {
+  background-color: #DAE7FE;
+}
+
+.hit:hover {
+  color: white;
+  background-color: #6688D4;
+}
+
+.problem {
+  background-color: #FF6230;
+}
+
+.problem:hover {
+  background-color: #FF0000;
+}
+
+span.lineNumber
+{
+  display: inline-block;
+  color: black;
+  background-color: #EFE383;
+}
+
+.addedLine {
+background-color: rgb(200, 255, 200)
+}
+.changedTokens {
+background-color: rgb(50, 255, 50)
+}
+
+pre
+{
+  font-family: monospace;
+  white-space: pre;
+}
+
+pre.fileContents
+{
+  margin: 0px;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+  background-color: #f1f1f1;
+}
+table{
+    border-collapse: collapse;
+}
+
+hr.ruler
+{
+  height:3px;
+  border-width:0;
+  color:#6688D4;
+  background-color:#6688D4
+}
+td.title
+{
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 20pt;
+  font-style: italic;
+  font-weight: bold;
+}
+td.footer {
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+}
+
+td.ItemLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+td.mutationLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+td.mutationText
+{
+  text-align: left;
+  vertical-align: top;
+}
+
+td.ItemText
+{
+  text-align: left;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  color:#6688D4;
+  white-space: nowrap;
+}
+
+td.ItemReport
+{
+  text-align: right;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.FileLink
+{
+  text-align: left;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportHigh
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #A7FC9D;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportMedium
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FFEA20;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportLow
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FF0000;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.MiddleHeader
+{
+  text-align: center;
+  padding-right: 6px;
+  padding-left: 6px;
+  font-family: sans-serif;
+  white-space: nowrap;
+}
+
+td.ItemHead
+{
+  text-align: center;
+  color: white;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #6688D4;
+  border-collapse: unset;
+  border: 1px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.barHi
+{
+  background-color: #00eb00;
+}
+
+td.barMed
+{
+  background-color: #FFEA20;
+}
+
+td.barLo
+{
+  background-color: #ff0000;
+}
+
+td.barBg
+{
+  background-color: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #c9d1d9;
+    background: #141517;
+  }
+  td.ItemReport, td.FileLink, td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.ItemHead {
+    border-color: #152035;
+  }
+  td.ItemReport, td.FileLink {
+    color: #DAE7FE;
+    background-color: #141517;
+  }
+  td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.barBg {
+    background-color: #141517;
+  }
+  td.ItemReportHigh {
+    color: #A7FC9D;
+  }
+  td.ItemReportMedium {
+    color: #FFEA20;
+  }
+  td.ItemReportLow {
+    color: #FF0000;
+  }
+  span.lineNumber {
+    color: white;
+    background-color: #26334F;
+  }
+  .collapsible {
+    color: #c9d1d9;
+  }
+  .content {
+    color: #c9d1d9;
+    background-color: #1B2539;
+  }
+  .hit {
+    background-color: #26334F;
+  }
+  .addedLine {
+    background-color: rgb(37, 83, 37);
+  }
+  .changedTokens {
+    background-color: rgb(32, 145, 32);
+  }
+  .problem {
+    background-color: #62200B;
+  }
+  a:link, a:visited  {
+	  color: #58a6ff;
+	}
+}
+
+</style>
+</head>
+<body>
+<table width ="100%" cellspacing="0" border="0">
+    <tr><td class="title">Mutation test report</td></tr>
+     <tr><td><hr class="ruler"/></td></tr>
+
+     <tr>
+     <td width="100%">
+     <table width="100%" cellpadding="1" border="0">
+     <tbody><tr>
+     <td class="ItemLabel" width="10%">Current display:</td>
+     <td class="ItemText" width="35%">top level</td>
+     <td width="10%"></td>
+     <td class="MiddleHeader" width="15%">Detected</td>
+     <td class="MiddleHeader" width="15%">Total</td>
+     <td class="MiddleHeader" width="15%">Percentage</td>
+     </tr>
+
+     <tr>
+     <td class="ItemLabel" width="10%">Date:</td>
+     <td class="ItemText" width="35%">2023-01-16 08:41:01.633723</td>
+     <td class="ItemLabel" width="10%">Mutations:</td>
+     <td class="ItemReport" width="15%">3021</td>
+     <td class="ItemReport" width="15%">6484</td>
+     <td class="ItemReportLow" width="15%">46.6 %</td>
+     </tr>
+     
+     <tr>
+     <td class="ItemLabel" width="10%">Builtin rules:</td>
+     <td class="ItemText" width="35%">false</td>
+     <td class="ItemLabel" width="10%">Timeouts:</td>
+     <td class="ItemReport" width="15%">1</td>
+     <td class="ItemReport" width="15%">6484</td>
+     <td class="ItemReportHigh" width="15%">0.0 %</td>
+     </tr>
+     <tr>
+     <td class="ItemLabel" width="10%">Quality rating:</td>
+     <td class="ItemText" width="35%">E</td>
+     <td class="ItemLabel" width="10%">Success:</td>
+     <td class="ItemText" width="15%">false</td>
+     <td class="ItemText" width="15%"></td>
+     <td class="ItemText" width="15%"></td>
+     </tr>
+       </tbody>
+     </table>
+     </td>
+     </tr>
+     
+
+     
+     <tr><td><hr class="ruler"/></td></tr>
+</table>
+
+<center>
+<table width ="80%" cellspacing="1" border="0">
+     <tbody>
+     <tr><td width="60%"></td><td width="10%"></td><td width="10%"></td><td width="10%"></td><td width="10%"></td></tr>
+     <tr><td class="ItemHead" width="60%">Path</td><td class="ItemHead" width="30%" colspan="3">Detection rate</td><td class="ItemHead" width="10%">Timeouts</td></tr>
+<tr><td class="FileLink" width="60%"><a href="lib\mutation_test.dart.html">lib\mutation_test.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="100.0%" height="10"></td>
+    <td class="barBg" width="0.0%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">100.0 %</td>
+  <td class="ItemReportHigh" width="10%">0 / 0</td>
+  <td class="ItemReportHigh" width="10%">0 / 0</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\builtin_rules.dart.html">lib\src\builtin_rules.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barMed" width="50.563746747614914%" height="10"></td>
+    <td class="barBg" width="49.436253252385086%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportMedium" width="10%">50.6 %</td>
+  <td class="ItemReportMedium" width="10%">583 / 1153</td>
+  <td class="ItemReportHigh" width="10%">0 / 1153</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\commands.dart.html">lib\src\commands.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="100.0%" height="10"></td>
+    <td class="barBg" width="0.0%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">100.0 %</td>
+  <td class="ItemReportHigh" width="10%">5 / 5</td>
+  <td class="ItemReportHigh" width="10%">0 / 5</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\configuration.dart.html">lib\src\configuration.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barMed" width="79.25531914893617%" height="10"></td>
+    <td class="barBg" width="20.744680851063833%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportMedium" width="10%">79.3 %</td>
+  <td class="ItemReportMedium" width="10%">149 / 188</td>
+  <td class="ItemReportHigh" width="10%">0 / 188</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\create_license_text.dart.html">lib\src\create_license_text.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="0.0%" height="10"></td>
+    <td class="barBg" width="100.0%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">0.0 %</td>
+  <td class="ItemReportLow" width="10%">0 / 40</td>
+  <td class="ItemReportHigh" width="10%">0 / 40</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\errors.dart.html">lib\src\errors.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="100.0%" height="10"></td>
+    <td class="barBg" width="0.0%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">100.0 %</td>
+  <td class="ItemReportHigh" width="10%">0 / 0</td>
+  <td class="ItemReportHigh" width="10%">0 / 0</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\html_reporter.dart.html">lib\src\html_reporter.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="49.47856315179606%" height="10"></td>
+    <td class="barBg" width="50.52143684820394%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">49.5 %</td>
+  <td class="ItemReportLow" width="10%">854 / 1726</td>
+  <td class="ItemReportHigh" width="10%">0 / 1726</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\mutations.dart.html">lib\src\mutations.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="90.13333333333334%" height="10"></td>
+    <td class="barBg" width="9.86666666666666%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">90.1 %</td>
+  <td class="ItemReportHigh" width="10%">338 / 375</td>
+  <td class="ItemReportHigh" width="10%">1 / 375</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\mutation_progress_bar.dart.html">lib\src\mutation_progress_bar.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="1.3888888888888888%" height="10"></td>
+    <td class="barBg" width="98.61111111111111%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">1.4 %</td>
+  <td class="ItemReportLow" width="10%">1 / 72</td>
+  <td class="ItemReportHigh" width="10%">0 / 72</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\mutation_test.dart.html">lib\src\mutation_test.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="1.1428571428571428%" height="10"></td>
+    <td class="barBg" width="98.85714285714286%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">1.1 %</td>
+  <td class="ItemReportLow" width="10%">2 / 175</td>
+  <td class="ItemReportHigh" width="10%">0 / 175</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\oss_licenses.dart.html">lib\src\oss_licenses.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="0.2863278453829635%" height="10"></td>
+    <td class="barBg" width="99.71367215461704%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">0.3 %</td>
+  <td class="ItemReportLow" width="10%">4 / 1397</td>
+  <td class="ItemReportHigh" width="10%">0 / 1397</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\progress_bar.dart.html">lib\src\progress_bar.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="88.94009216589862%" height="10"></td>
+    <td class="barBg" width="11.05990783410138%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">88.9 %</td>
+  <td class="ItemReportHigh" width="10%">193 / 217</td>
+  <td class="ItemReportHigh" width="10%">0 / 217</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\range.dart.html">lib\src\range.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="86.02150537634408%" height="10"></td>
+    <td class="barBg" width="13.97849462365592%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">86.0 %</td>
+  <td class="ItemReportHigh" width="10%">80 / 93</td>
+  <td class="ItemReportHigh" width="10%">0 / 93</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\ratings.dart.html">lib\src\ratings.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="86.11111111111111%" height="10"></td>
+    <td class="barBg" width="13.888888888888886%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">86.1 %</td>
+  <td class="ItemReportHigh" width="10%">31 / 36</td>
+  <td class="ItemReportHigh" width="10%">0 / 36</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\replacements.dart.html">lib\src\replacements.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="81.70212765957447%" height="10"></td>
+    <td class="barBg" width="18.297872340425528%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">81.7 %</td>
+  <td class="ItemReportHigh" width="10%">192 / 235</td>
+  <td class="ItemReportHigh" width="10%">0 / 235</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\report_format.dart.html">lib\src\report_format.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="82.78301886792453%" height="10"></td>
+    <td class="barBg" width="17.216981132075475%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">82.8 %</td>
+  <td class="ItemReportHigh" width="10%">351 / 424</td>
+  <td class="ItemReportHigh" width="10%">0 / 424</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\string_helpers.dart.html">lib\src\string_helpers.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barHi" width="86.18181818181819%" height="10"></td>
+    <td class="barBg" width="13.818181818181813%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportHigh" width="10%">86.2 %</td>
+  <td class="ItemReportHigh" width="10%">237 / 275</td>
+  <td class="ItemReportHigh" width="10%">0 / 275</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\test_runner.dart.html">lib\src\test_runner.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="0.0%" height="10"></td>
+    <td class="barBg" width="100.0%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">0.0 %</td>
+  <td class="ItemReportLow" width="10%">0 / 67</td>
+  <td class="ItemReportHigh" width="10%">0 / 67</td>
+</tr>
+<tr><td class="FileLink" width="60%"><a href="lib\src\version.dart.html">lib\src\version.dart</a></td>
+  <td class="ItemReport" width="10%">
+  <table width="100%" cellpadding="0" border="1"><tr>
+    <td class="barLo" width="16.666666666666668%" height="10"></td>
+    <td class="barBg" width="83.33333333333333%" height="10"></td>
+  </tr></table>
+  </td>
+  <td class="ItemReportLow" width="10%">16.7 %</td>
+  <td class="ItemReportLow" width="10%">1 / 6</td>
+  <td class="ItemReportHigh" width="10%">0 / 6</td>
+</tr>
+    </tbody>
+</table>
+</center>
+
+
+<table width ="100%" cellspacing="0" border="0">
+  <tr><td><hr class="ruler"/></td></tr>
+  <tr><td class="footer">Generated by <a href="https://domohuhn.github.io/mutation-test/">mutation-test version: 1.3.2</a></td></tr>
+</table>
+</body>
+</html>

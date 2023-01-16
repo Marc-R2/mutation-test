@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  color: black;
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+
+.hit {
+  background-color: #DAE7FE;
+}
+
+.hit:hover {
+  color: white;
+  background-color: #6688D4;
+}
+
+.problem {
+  background-color: #FF6230;
+}
+
+.problem:hover {
+  background-color: #FF0000;
+}
+
+span.lineNumber
+{
+  display: inline-block;
+  color: black;
+  background-color: #EFE383;
+}
+
+.addedLine {
+background-color: rgb(200, 255, 200)
+}
+.changedTokens {
+background-color: rgb(50, 255, 50)
+}
+
+pre
+{
+  font-family: monospace;
+  white-space: pre;
+}
+
+pre.fileContents
+{
+  margin: 0px;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+  background-color: #f1f1f1;
+}
+table{
+    border-collapse: collapse;
+}
+
+hr.ruler
+{
+  height:3px;
+  border-width:0;
+  color:#6688D4;
+  background-color:#6688D4
+}
+td.title
+{
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 20pt;
+  font-style: italic;
+  font-weight: bold;
+}
+td.footer {
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+}
+
+td.ItemLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+td.mutationLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+td.mutationText
+{
+  text-align: left;
+  vertical-align: top;
+}
+
+td.ItemText
+{
+  text-align: left;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  color:#6688D4;
+  white-space: nowrap;
+}
+
+td.ItemReport
+{
+  text-align: right;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.FileLink
+{
+  text-align: left;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportHigh
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #A7FC9D;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportMedium
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FFEA20;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportLow
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FF0000;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.MiddleHeader
+{
+  text-align: center;
+  padding-right: 6px;
+  padding-left: 6px;
+  font-family: sans-serif;
+  white-space: nowrap;
+}
+
+td.ItemHead
+{
+  text-align: center;
+  color: white;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #6688D4;
+  border-collapse: unset;
+  border: 1px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.barHi
+{
+  background-color: #00eb00;
+}
+
+td.barMed
+{
+  background-color: #FFEA20;
+}
+
+td.barLo
+{
+  background-color: #ff0000;
+}
+
+td.barBg
+{
+  background-color: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #c9d1d9;
+    background: #141517;
+  }
+  td.ItemReport, td.FileLink, td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.ItemHead {
+    border-color: #152035;
+  }
+  td.ItemReport, td.FileLink {
+    color: #DAE7FE;
+    background-color: #141517;
+  }
+  td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.barBg {
+    background-color: #141517;
+  }
+  td.ItemReportHigh {
+    color: #A7FC9D;
+  }
+  td.ItemReportMedium {
+    color: #FFEA20;
+  }
+  td.ItemReportLow {
+    color: #FF0000;
+  }
+  span.lineNumber {
+    color: white;
+    background-color: #26334F;
+  }
+  .collapsible {
+    color: #c9d1d9;
+  }
+  .content {
+    color: #c9d1d9;
+    background-color: #1B2539;
+  }
+  .hit {
+    background-color: #26334F;
+  }
+  .addedLine {
+    background-color: rgb(37, 83, 37);
+  }
+  .changedTokens {
+    background-color: rgb(32, 145, 32);
+  }
+  .problem {
+    background-color: #62200B;
+  }
+  a:link, a:visited  {
+	  color: #58a6ff;
+	}
+}
+
+</style>
+</head>
+<body>
+<table width ="100%" cellspacing="0" border="0">
+    <tr><td class="title">Mutation test report</td></tr>
+     <tr><td><hr class="ruler"/></td></tr>
+
+     <tr>
+     <td width="100%">
+     <table width="100%" cellpadding="1" border="0">
+     <tbody><tr>
+     <td class="ItemLabel" width="10%">Current display:</td>
+     <td class="ItemText" width="35%">lib\src\commands.dart - <a href="../../mutation-test-report.html">back to top</a></td>
+     <td width="10%"></td>
+     <td class="MiddleHeader" width="15%">Detected</td>
+     <td class="MiddleHeader" width="15%">Total</td>
+     <td class="MiddleHeader" width="15%">Percentage</td>
+     </tr>
+
+     <tr>
+     <td class="ItemLabel" width="10%">Date:</td>
+     <td class="ItemText" width="35%">2023-01-16 08:41:01.675203</td>
+     <td class="ItemLabel" width="10%">Mutations:</td>
+     <td class="ItemReport" width="15%">5</td>
+     <td class="ItemReport" width="15%">5</td>
+     <td class="ItemReportHigh" width="15%">100.0 %</td>
+     </tr>
+     
+     <tr>
+     <td class="ItemLabel" width="10%">Builtin rules:</td>
+     <td class="ItemText" width="35%">false</td>
+     <td class="ItemLabel" width="10%">Timeouts:</td>
+     <td class="ItemReport" width="15%">0</td>
+     <td class="ItemReport" width="15%">5</td>
+     <td class="ItemReportHigh" width="15%">0.0 %</td>
+     </tr>
+     </tbody>
+     </table>
+     </td>
+     </tr>
+     
+
+     
+     <tr><td><hr class="ruler"/></td></tr>
+</table>
+
+<pre class="fileHeader">Source code</pre>
+<pre class="fileContents">
+<a name="1"><span class="lineNumber">       1 </span>/// Copyright 2021, domohuhn.</a>
+<a name="2"><span class="lineNumber">       2 </span>/// License: BSD-3-Clause</a>
+<a name="3"><span class="lineNumber">       3 </span>/// See LICENSE for the full text of the license</a>
+<a name="4"><span class="lineNumber">       4 </span></a>
+<a name="5"><span class="lineNumber">       5 </span>/// A command to check if a mutation survives your tests.</a>
+<a name="6"><span class="lineNumber">       6 </span>///</a>
+<a name="7"><span class="lineNumber">       7 </span>/// The return value of the command is checked against the expectedReturnValue to determine success.</a>
+<a name="8"><span class="lineNumber">       8 </span>class Command {</a>
+<a name="9"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">       9 </span>  Command(this.original, this.command, this.arguments);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+  <span class="changedTokens"> Command( this.command,this.original, this.arguments);</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+  <span class="changedTokens"> Command(this.original, this.arguments, this.command);</span></span></td></tr></table>
+
+</div></a><a name="10"><span class="lineNumber">      10 </span></a>
+<a name="11"><span class="lineNumber">      11 </span>  String group = '';</a>
+<a name="12"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      12 </span>  String? directory;</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   <span class="changedTokens">String ? "$original"' : directory;
+  int expectedReturnValue = 0;
+  Duration? timeout;
+  final String original;
+  final String command;
+  final List&lt;String&gt; arguments;
+
+  @override
+  String toString() {
+    return 'Command;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+   <span class="changedTokens">!String ? directory;
+  int expectedReturnValue = 0;
+  Duration? timeout;
+  final String original;
+  final String command;
+  final List&lt;String&gt; arguments;
+
+  @override
+  String toString() {
+    return 'Command : "$original"';</span></span></td></tr></table>
+
+</div></a><a name="13"><span class="lineNumber">      13 </span>  int expectedReturnValue = 0;</a>
+<a name="14"><span class="lineNumber">      14 </span>  Duration? timeout;</a>
+<a name="15"><span class="lineNumber">      15 </span>  final String original;</a>
+<a name="16"><span class="lineNumber">      16 </span>  final String command;</a>
+<a name="17"><span class="lineNumber">      17 </span>  final List&lt;String&gt; arguments;</a>
+<a name="18"><span class="lineNumber">      18 </span></a>
+<a name="19"><span class="lineNumber">      19 </span>  @override</a>
+<a name="20"><span class="lineNumber">      20 </span>  String toString() {</a>
+<a name="21"><span class="lineNumber">      21 </span>    return 'Command: "$original"';</a>
+<a name="22"><span class="lineNumber">      22 </span>  }</a>
+<a name="23"><span class="lineNumber">      23 </span>}</a>
+<a name="24"><span class="lineNumber">      24 </span></a>
+<a name="25"><span class="lineNumber">      25 </span>/// Result of running a test command</a>
+<a name="26"><span class="lineNumber">      26 </span>enum TestResult { Timeout, Detected, Undetected }</a>
+<a name="27"><span class="lineNumber">      27 </span></a>
+<a name="28"><span class="lineNumber">      28 </span>/// A report after running a test command.</a>
+<a name="29"><span class="lineNumber">      29 </span>class TestReport {</a>
+<a name="30"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      30 </span>  TestReport(this.result, {this.command});</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+  <span class="changedTokens"> TestReport( {this.command},this.result);</span></span></td></tr></table>
+
+</div></a><a name="31"><span class="lineNumber">      31 </span></a>
+<a name="32"><span class="lineNumber">      32 </span>  TestResult result;</a>
+<a name="33"><span class="lineNumber">      33 </span>  Command? command;</a>
+<a name="34"><span class="lineNumber">      34 </span>}</a>
+<a name="35"><span class="lineNumber">      35 </span></a>
+</pre>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+	for (k = 0; k < coll.length; k++) {
+      var content2 = coll[k].nextElementSibling;
+      if (content2.style.maxHeight && content.parentElement == content2){
+      content2.style.maxHeight = content2.scrollHeight + content.scrollHeight + "px";
+    }
+      
+    }
+    
+  });
+}
+</script><table width ="100%" cellspacing="0" border="0">
+  <tr><td><hr class="ruler"/></td></tr>
+  <tr><td class="footer">Generated by <a href="https://domohuhn.github.io/mutation-test/">mutation-test version: 1.3.2</a></td></tr>
+</table>
+</body>
+</html>

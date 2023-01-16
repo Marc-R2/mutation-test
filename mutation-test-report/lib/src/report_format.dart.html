@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  color: black;
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+}
+
+.hit {
+  background-color: #DAE7FE;
+}
+
+.hit:hover {
+  color: white;
+  background-color: #6688D4;
+}
+
+.problem {
+  background-color: #FF6230;
+}
+
+.problem:hover {
+  background-color: #FF0000;
+}
+
+span.lineNumber
+{
+  display: inline-block;
+  color: black;
+  background-color: #EFE383;
+}
+
+.addedLine {
+background-color: rgb(200, 255, 200)
+}
+.changedTokens {
+background-color: rgb(50, 255, 50)
+}
+
+pre
+{
+  font-family: monospace;
+  white-space: pre;
+}
+
+pre.fileContents
+{
+  margin: 0px;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
+  background-color: #f1f1f1;
+}
+table{
+    border-collapse: collapse;
+}
+
+hr.ruler
+{
+  height:3px;
+  border-width:0;
+  color:#6688D4;
+  background-color:#6688D4
+}
+td.title
+{
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 20pt;
+  font-style: italic;
+  font-weight: bold;
+}
+td.footer {
+  text-align: center;
+  padding-bottom: 10px;
+  font-family: Helvetica, sans-serif;
+  font-size: 12pt;
+}
+
+td.ItemLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+td.mutationLabel
+{
+  text-align: right;
+  padding-right: 6px;
+  font-weight: bold;
+  vertical-align: top;
+}
+
+td.mutationText
+{
+  text-align: left;
+  vertical-align: top;
+}
+
+td.ItemText
+{
+  text-align: left;
+  padding-right: 6px;
+  font-family: sans-serif;
+  font-weight: bold;
+  color:#6688D4;
+  white-space: nowrap;
+}
+
+td.ItemReport
+{
+  text-align: right;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.FileLink
+{
+  text-align: left;
+  color: #284FA8;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #DAE7FE;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportHigh
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #A7FC9D;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportMedium
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FFEA20;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.ItemReportLow
+{
+  text-align: right;
+  color: black;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #FF0000;
+  border-collapse: unset;
+  border: 2px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.MiddleHeader
+{
+  text-align: center;
+  padding-right: 6px;
+  padding-left: 6px;
+  font-family: sans-serif;
+  white-space: nowrap;
+}
+
+td.ItemHead
+{
+  text-align: center;
+  color: white;
+  font-family: sans-serif;
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 6px;
+  padding-right: 6px;
+  background-color: #6688D4;
+  border-collapse: unset;
+  border: 1px;
+  border-color: white;
+  border-style: solid;
+}
+
+td.barHi
+{
+  background-color: #00eb00;
+}
+
+td.barMed
+{
+  background-color: #FFEA20;
+}
+
+td.barLo
+{
+  background-color: #ff0000;
+}
+
+td.barBg
+{
+  background-color: #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #c9d1d9;
+    background: #141517;
+  }
+  td.ItemReport, td.FileLink, td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.ItemHead {
+    border-color: #152035;
+  }
+  td.ItemReport, td.FileLink {
+    color: #DAE7FE;
+    background-color: #141517;
+  }
+  td.ItemReportHigh, td.ItemReportMedium, td.ItemReportLow, td.barBg {
+    background-color: #141517;
+  }
+  td.ItemReportHigh {
+    color: #A7FC9D;
+  }
+  td.ItemReportMedium {
+    color: #FFEA20;
+  }
+  td.ItemReportLow {
+    color: #FF0000;
+  }
+  span.lineNumber {
+    color: white;
+    background-color: #26334F;
+  }
+  .collapsible {
+    color: #c9d1d9;
+  }
+  .content {
+    color: #c9d1d9;
+    background-color: #1B2539;
+  }
+  .hit {
+    background-color: #26334F;
+  }
+  .addedLine {
+    background-color: rgb(37, 83, 37);
+  }
+  .changedTokens {
+    background-color: rgb(32, 145, 32);
+  }
+  .problem {
+    background-color: #62200B;
+  }
+  a:link, a:visited  {
+	  color: #58a6ff;
+	}
+}
+
+</style>
+</head>
+<body>
+<table width ="100%" cellspacing="0" border="0">
+    <tr><td class="title">Mutation test report</td></tr>
+     <tr><td><hr class="ruler"/></td></tr>
+
+     <tr>
+     <td width="100%">
+     <table width="100%" cellpadding="1" border="0">
+     <tbody><tr>
+     <td class="ItemLabel" width="10%">Current display:</td>
+     <td class="ItemText" width="35%">lib\src\report_format.dart - <a href="../../mutation-test-report.html">back to top</a></td>
+     <td width="10%"></td>
+     <td class="MiddleHeader" width="15%">Detected</td>
+     <td class="MiddleHeader" width="15%">Total</td>
+     <td class="MiddleHeader" width="15%">Percentage</td>
+     </tr>
+
+     <tr>
+     <td class="ItemLabel" width="10%">Date:</td>
+     <td class="ItemText" width="35%">2023-01-16 08:41:02.196924</td>
+     <td class="ItemLabel" width="10%">Mutations:</td>
+     <td class="ItemReport" width="15%">351</td>
+     <td class="ItemReport" width="15%">424</td>
+     <td class="ItemReportHigh" width="15%">82.8 %</td>
+     </tr>
+     
+     <tr>
+     <td class="ItemLabel" width="10%">Builtin rules:</td>
+     <td class="ItemText" width="35%">false</td>
+     <td class="ItemLabel" width="10%">Timeouts:</td>
+     <td class="ItemReport" width="15%">0</td>
+     <td class="ItemReport" width="15%">424</td>
+     <td class="ItemReportHigh" width="15%">0.0 %</td>
+     </tr>
+     </tbody>
+     </table>
+     </td>
+     </tr>
+     
+
+     
+     <tr><td><hr class="ruler"/></td></tr>
+</table>
+
+<pre class="fileHeader">Source code</pre>
+<pre class="fileContents">
+<a name="1"><span class="lineNumber">       1 </span>/// Copyright 2021, domohuhn.</a>
+<a name="2"><span class="lineNumber">       2 </span>/// License: BSD-3-Clause</a>
+<a name="3"><span class="lineNumber">       3 </span>/// See LICENSE for the full text of the license</a>
+<a name="4"><span class="lineNumber">       4 </span></a>
+<a name="5"><span class="lineNumber">       5 </span>import 'dart:io';</a>
+<a name="6"><span class="lineNumber">       6 </span></a>
+<a name="7"><span class="lineNumber">       7 </span>import 'package:mutation_test/src/commands.dart';</a>
+<a name="8"><span class="lineNumber">       8 </span>import 'package:mutation_test/src/errors.dart';</a>
+<a name="9"><span class="lineNumber">       9 </span>import 'package:mutation_test/src/html_reporter.dart';</a>
+<a name="10"><span class="lineNumber">      10 </span>import 'package:mutation_test/src/mutations.dart';</a>
+<a name="11"><span class="lineNumber">      11 </span>import 'package:mutation_test/src/ratings.dart';</a>
+<a name="12"><span class="lineNumber">      12 </span>import 'package:mutation_test/src/string_helpers.dart';</a>
+<a name="13"><span class="lineNumber">      13 </span>import 'package:mutation_test/src/version.dart';</a>
+<a name="14"><span class="lineNumber">      14 </span></a>
+<a name="15"><span class="lineNumber">      15 </span>/// Format for the report file</a>
+<a name="16"><span class="lineNumber">      16 </span>enum ReportFormat {</a>
+<a name="17"><span class="lineNumber">      17 </span>  /// Creates the report as XML document.</a>
+<a name="18"><span class="lineNumber">      18 </span>  XML,</a>
+<a name="19"><span class="lineNumber">      19 </span></a>
+<a name="20"><span class="lineNumber">      20 </span>  /// Creates the report as markdown document.</a>
+<a name="21"><span class="lineNumber">      21 </span>  MARKDOWN,</a>
+<a name="22"><span class="lineNumber">      22 </span></a>
+<a name="23"><span class="lineNumber">      23 </span>  /// Creates the report as html documents.</a>
+<a name="24"><span class="lineNumber">      24 </span>  HTML,</a>
+<a name="25"><span class="lineNumber">      25 </span></a>
+<a name="26"><span class="lineNumber">      26 </span>  /// Creates all reports at once.</a>
+<a name="27"><span class="lineNumber">      27 </span>  ALL,</a>
+<a name="28"><span class="lineNumber">      28 </span></a>
+<a name="29"><span class="lineNumber">      29 </span>  /// Creates no report.</a>
+<a name="30"><span class="lineNumber">      30 </span>  NONE</a>
+<a name="31"><span class="lineNumber">      31 </span>}</a>
+<a name="32"><span class="lineNumber">      32 </span></a>
+<a name="33"><span class="lineNumber">      33 </span>/// Holds the report data for a file.</a>
+<a name="34"><span class="lineNumber">      34 </span>class FileMutationResults {</a>
+<a name="35"><span class="lineNumber">      35 </span>  FileMutationResults(this.path, this.mutationCount, this.contents)</a>
+<a name="36"><span class="lineNumber">      36 </span>      : undetectedMutations = [],</a>
+<a name="37"><span class="lineNumber">      37 </span>        detectedMutations = [],</a>
+<a name="38"><span class="lineNumber">      38 </span>        timeoutMutations = [];</a>
+<a name="39"><span class="lineNumber">      39 </span></a>
+<a name="40"><span class="lineNumber">      40 </span>  /// path to the file</a>
+<a name="41"><span class="lineNumber">      41 </span>  String path;</a>
+<a name="42"><span class="lineNumber">      42 </span></a>
+<a name="43"><span class="lineNumber">      43 </span>  /// contents of the file</a>
+<a name="44"><span class="lineNumber">      44 </span>  String contents;</a>
+<a name="45"><span class="lineNumber">      45 </span></a>
+<a name="46"><span class="lineNumber">      46 </span>  /// total mutation count per file</a>
+<a name="47"><span class="lineNumber">      47 </span>  int mutationCount = 0;</a>
+<a name="48"><span class="lineNumber">      48 </span></a>
+<a name="49"><span class="lineNumber">      49 </span>  /// detected count per file</a>
+<a name="50"><span class="lineNumber">      50 </span>  int detectedCount = 0;</a>
+<a name="51"><span class="lineNumber">      51 </span></a>
+<a name="52"><span class="lineNumber">      52 </span>  /// timeout count per file</a>
+<a name="53"><span class="lineNumber">      53 </span>  int timeoutCount = 0;</a>
+<a name="54"><span class="lineNumber">      54 </span></a>
+<a name="55"><span class="lineNumber">      55 </span>  /// undected mutations in this file</a>
+<a name="56"><span class="lineNumber">      56 </span>  List&lt;MutatedLine&gt; undetectedMutations;</a>
+<a name="57"><span class="lineNumber">      57 </span></a>
+<a name="58"><span class="lineNumber">      58 </span>  /// dected mutations in this file</a>
+<a name="59"><span class="lineNumber">      59 </span>  List&lt;MutatedLine&gt; detectedMutations;</a>
+<a name="60"><span class="lineNumber">      60 </span></a>
+<a name="61"><span class="lineNumber">      61 </span>  /// dected mutations in this file</a>
+<a name="62"><span class="lineNumber">      62 </span>  List&lt;MutatedLine&gt; timeoutMutations;</a>
+<a name="63"><span class="lineNumber">      63 </span></a>
+<a name="64"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      64 </span>  bool lineHasUndetectedMutation(int i) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool<span class="changedTokens"> lineHasUndetectedMutation( i,int i) {
+    return _lineIsInList(undetectedMutations);</span></span></td></tr></table>
+
+</div></a><a name="65"><span class="lineNumber">      65 </span>    return _lineIsInList(undetectedMutations, i);</a>
+<a name="66"><span class="lineNumber">      66 </span>  }</a>
+<a name="67"><span class="lineNumber">      67 </span></a>
+<a name="68"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      68 </span>  bool lineHasDetectedMutation(int i) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool<span class="changedTokens"> lineHasDetectedMutation( i,int i) {
+    return _lineIsInList(detectedMutations);</span></span></td></tr></table>
+
+</div></a><a name="69"><span class="lineNumber">      69 </span>    return _lineIsInList(detectedMutations, i);</a>
+<a name="70"><span class="lineNumber">      70 </span>  }</a>
+<a name="71"><span class="lineNumber">      71 </span></a>
+<a name="72"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      72 </span>  bool lineHasTimeoutMutation(int i) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool<span class="changedTokens"> lineHasTimeoutMutation( i,int i) {
+    return _lineIsInList(timeoutMutations);</span></span></td></tr></table>
+
+</div></a><a name="73"><span class="lineNumber">      73 </span>    return _lineIsInList(timeoutMutations, i);</a>
+<a name="74"><span class="lineNumber">      74 </span>  }</a>
+<a name="75"><span class="lineNumber">      75 </span></a>
+<a name="76"><span class="lineNumber">      76 </span>  bool lineHasMutation(int i) {</a>
+<a name="77"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">      77 </span>    return _lineIsInList(undetectedMutations, i) ||</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return _lineIsInList(undetectedMutations, i) <span class="changedTokens">&amp;&amp;</span></span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return _lineIsInList(undetectedMutations, i) <span class="changedTokens">||!(
+        _lineIsInList(detectedMutations, i))</span> ||</span></td></tr></table>
+
+</div></a><a name="78"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">      78 </span>        _lineIsInList(detectedMutations, i) ||</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _lineIsInList(detectedMutations, i) <span class="changedTokens">&amp;&amp;</span></span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _lineIsInList(detectedMutations, i) <span class="changedTokens">||!(
+        _lineIsInList(timeoutMutations, i))</span>;</span></td></tr></table>
+
+</div></a><a name="79"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      79 </span>        _lineIsInList(timeoutMutations, i);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> _lineIsInList( i,timeoutMutations);</span></span></td></tr></table>
+
+</div></a><a name="80"><span class="lineNumber">      80 </span>  }</a>
+<a name="81"><span class="lineNumber">      81 </span></a>
+<a name="82"><span class="lineNumber">      82 </span>  bool lineHasProblem(int i) {</a>
+<a name="83"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">      83 </span>    return _lineIsInList(undetectedMutations, i) ||</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return _lineIsInList(undetectedMutations, i) <span class="changedTokens">&amp;&amp;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return _lineIsInList(undetectedMutations, i) <span class="changedTokens">||!(
+        _lineIsInList(timeoutMutations, i))</span>;</span></td></tr></table>
+
+</div></a><a name="84"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      84 </span>        _lineIsInList(timeoutMutations, i);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> _lineIsInList( i,timeoutMutations);</span></span></td></tr></table>
+
+</div></a><a name="85"><span class="lineNumber">      85 </span>  }</a>
+<a name="86"><span class="lineNumber">      86 </span></a>
+<a name="87"><span class="lineNumber">      87 </span>  bool _lineIsInList(List&lt;MutatedLine&gt; list, int i) {</a>
+<a name="88"><span class="lineNumber">      88 </span>    for (final m in list) {</a>
+<a name="89"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">      89 </span>      if (m.line == i) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (m.line <span class="changedTokens">&gt;=</span> i) {</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (m.line <span class="changedTokens">&lt;=</span> i) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (m.line <span class="changedTokens">!=</span> i) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (m.line <span class="changedTokens">&gt;</span> i) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (m.line <span class="changedTokens">&lt;</span> i) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+      <span class="changedTokens"> if (!(m.line == i)) {</span></span></td></tr></table>
+
+</div></a><a name="90"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      90 </span>        return true;</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         return <span class="changedTokens">false</span>;</span></td></tr></table>
+
+</div></a><a name="91"><span class="lineNumber">      91 </span>      }</a>
+<a name="92"><span class="lineNumber">      92 </span>    }</a>
+<a name="93"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">      93 </span>    return false;</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return <span class="changedTokens">true</span>;</span></td></tr></table>
+
+</div></a><a name="94"><span class="lineNumber">      94 </span>  }</a>
+<a name="95"><span class="lineNumber">      95 </span>}</a>
+<a name="96"><span class="lineNumber">      96 </span></a>
+<a name="97"><span class="lineNumber">      97 </span>/// This class logs the mutations and can create report documents in different</a>
+<a name="98"><span class="lineNumber">      98 </span>/// formats. See [ReportFormat] for the supported reports.</a>
+<a name="99"><span class="lineNumber">      99 </span>///</a>
+<a name="100"><span class="lineNumber">     100 </span>/// It may create multiple folders in the output path depending on the selected report</a>
+<a name="101"><span class="lineNumber">     101 </span>/// format.</a>
+<a name="102"><span class="lineNumber">     102 </span>class ResultsReporter {</a>
+<a name="103"><span class="lineNumber">     103 </span>  /// Creates a test runner and adds [inputFile] to the xml input file list.</a>
+<a name="104"><span class="lineNumber">     104 </span>  /// [builtinRulesAdded] sets the flag in the report file when the builtin rules were added.</a>
+<a name="105"><span class="lineNumber">     105 </span>  ResultsReporter(String inputFile, this.builtinRulesAdded) {</a>
+<a name="106"><span class="lineNumber">     106 </span>    xmlFiles.add(inputFile);</a>
+<a name="107"><span class="lineNumber">     107 </span>    _timer.start();</a>
+<a name="108"><span class="lineNumber">     108 </span>  }</a>
+<a name="109"><span class="lineNumber">     109 </span></a>
+<a name="110"><span class="lineNumber">     110 </span>  /// statistics which command group caught how many mutations</a>
+<a name="111"><span class="lineNumber">     111 </span>  final Map&lt;String, int&gt; _groupStatistics = {};</a>
+<a name="112"><span class="lineNumber">     112 </span></a>
+<a name="113"><span class="lineNumber">     113 </span>  /// stores the undetected mutations</a>
+<a name="114"><span class="lineNumber">     114 </span>  final Map&lt;String, FileMutationResults&gt; testedFiles = {};</a>
+<a name="115"><span class="lineNumber">     115 </span></a>
+<a name="116"><span class="lineNumber">     116 </span>  /// all files that were added as rules</a>
+<a name="117"><span class="lineNumber">     117 </span>  List&lt;String&gt; xmlFiles = [];</a>
+<a name="118"><span class="lineNumber">     118 </span>  Ratings quality = Ratings();</a>
+<a name="119"><span class="lineNumber">     119 </span></a>
+<a name="120"><span class="lineNumber">     120 </span>  final Stopwatch _timer = Stopwatch();</a>
+<a name="121"><span class="lineNumber">     121 </span></a>
+<a name="122"><span class="lineNumber">     122 </span>  Duration get elapsed =&gt; _timer.elapsed;</a>
+<a name="123"><span class="lineNumber">     123 </span></a>
+<a name="124"><span class="lineNumber">     124 </span>  /// whether the builtin rules were added.</a>
+<a name="125"><span class="lineNumber">     125 </span>  final bool builtinRulesAdded;</a>
+<a name="126"><span class="lineNumber">     126 </span></a>
+<a name="127"><span class="lineNumber">     127 </span>  int _totalFound = 0;</a>
+<a name="128"><span class="lineNumber">     128 </span>  int _totalRuns = 0;</a>
+<a name="129"><span class="lineNumber">     129 </span>  int _totalTimeouts = 0;</a>
+<a name="130"><span class="lineNumber">     130 </span></a>
+<a name="131"><span class="lineNumber">     131 </span>  /// Adds the [test] report to the accumulated statistics.</a>
+<a name="132"><span class="lineNumber">     132 </span>  /// This method will print to the command line if [verbose] is true.</a>
+<a name="133"><span class="lineNumber">     133 </span>  void addTestReport(</a>
+<a name="134"><span class="lineNumber">     134 </span>    String file,</a>
+<a name="135"><span class="lineNumber">     135 </span>    MutatedLine mutation,</a>
+<a name="136"><span class="lineNumber">     136 </span>    TestReport test,</a>
+<a name="137"><span class="lineNumber">     137 </span>    bool verbose,</a>
+<a name="138"><span class="lineNumber">     138 </span>  ) {</a>
+<a name="139"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     139 </span>    _totalRuns += 1;</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     _totalRuns <span class="changedTokens">-</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     _totalRuns <span class="changedTokens">*</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     _totalRuns <span class="changedTokens">/</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     _totalRuns <span class="changedTokens">%</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     _totalRuns <span class="changedTokens">^</span>= 1;</span></td></tr></table>
+
+</div></a><a name="140"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     140 </span>    switch (test.result) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> switch( mutation);
+        break;
+      case TestResult.Detected:
+        if (verbose) {
+          print('Found mutation with ${test.command}',test.result) {
+      case TestResult.Timeout:
+        if (verbose) {
+          print('Timeout for ${test.command}');
+        }
+        _totalTimeouts += 1;
+        if (testedFiles.containsKey(file)) {
+          testedFiles[file]!.timeoutCount += 1;
+        } else {
+          throw MutationError('"$file" was not registered in the reporter!');
+        }
+        addTimeoutMutation(file);</span></span></td></tr></table>
+
+</div></a><a name="141"><span class="lineNumber">     141 </span>      case TestResult.Timeout:</a>
+<a name="142"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     142 </span>        if (verbose) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(verbose)) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!(verbose)) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!verbose) {</span></span></td></tr></table>
+
+</div></a><a name="143"><span class="lineNumber">     143 </span>          print('Timeout for ${test.command}');</a>
+<a name="144"><span class="lineNumber">     144 </span>        }</a>
+<a name="145"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     145 </span>        _totalTimeouts += 1;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalTimeouts <span class="changedTokens">^</span>= 1;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalTimeouts <span class="changedTokens">-</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalTimeouts <span class="changedTokens">*</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalTimeouts <span class="changedTokens">/</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalTimeouts <span class="changedTokens">%</span>= 1;</span></td></tr></table>
+
+</div></a><a name="146"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     146 </span>        if (testedFiles.containsKey(file)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(testedFiles.containsKey(file))) {</span></span></td></tr></table>
+
+</div></a><a name="147"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     147 </span>          testedFiles[file]!.timeoutCount += 1;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.timeoutCount <span class="changedTokens">^</span>= 1;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.timeoutCount <span class="changedTokens">-</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.timeoutCount <span class="changedTokens">*</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.timeoutCount <span class="changedTokens">/</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.timeoutCount <span class="changedTokens">%</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]<span class="changedTokens"></span>.timeoutCount += 1;</span></td></tr></table>
+
+</div></a><a name="148"><span class="lineNumber">     148 </span>        } else {</a>
+<a name="149"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     149 </span>          throw MutationError('"$file" was not registered in the reporter!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           throw MutationError('"$file" was not registered in the reporter<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="150"><span class="lineNumber">     150 </span>        }</a>
+<a name="151"><span class="lineNumber">     151 </span>        addTimeoutMutation(file, mutation);</a>
+<a name="152"><span class="lineNumber">     152 </span>        break;</a>
+<a name="153"><span class="lineNumber">     153 </span>      case TestResult.Detected:</a>
+<a name="154"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     154 </span>        if (verbose) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!(verbose)) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!verbose) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(verbose)) {</span></span></td></tr></table>
+
+</div></a><a name="155"><span class="lineNumber">     155 </span>          print('Found mutation with ${test.command}');</a>
+<a name="156"><span class="lineNumber">     156 </span>        }</a>
+<a name="157"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     157 </span>        if (test.command != null &amp;&amp; test.command!.group.isNotEmpty) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command != null <span class="changedTokens">&amp;&amp;!( test.command!.group.isNotEmpty))</span> {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if <span class="changedTokens">(test.command != null &amp;&amp;!( test.command!.group.isNotEmpty))</span> {</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(test.command != null &amp;&amp; test.command!.group.isNotEmpty)) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command != null <span class="changedTokens">||</span> test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens">==</span> null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens">&lt;</span> null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens">&gt;</span> null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens">&lt;=</span> null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens">&gt;=</span> null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command <span class="changedTokens"></span>= null &amp;&amp; test.command!.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if (test.command != null &amp;&amp; test.command<span class="changedTokens"></span>.group.isNotEmpty) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+         if <span class="changedTokens">(!(test.command != null )&amp;&amp; test.command!.group.isNotEmpty)</span> {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!(test.command != null )&amp;&amp;</span> test.command!.group.isNotEmpty) {</span></td></tr></table>
+
+</div></a><a name="158"><span class="lineNumber">     158 </span>          _groupStatistics.update(</a>
+<a name="159"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     159 </span>            test.command!.group,</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+             test.command<span class="changedTokens"></span>.group,</span></td></tr></table>
+
+</div></a><a name="160"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     160 </span>            (v) =&gt; v + 1,</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+             (v) =&gt; v <span class="changedTokens">-</span> 1,</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+             (v) =&gt; v <span class="changedTokens">*</span> 1,</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+             (v) =&gt; v <span class="changedTokens">%</span> 1,</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+             (v) =&gt; v <span class="changedTokens">^</span> 1,</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+             (v) =&gt; v <span class="changedTokens">/</span> 1,</span></td></tr></table>
+
+</div></a><a name="161"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     161 </span>            ifAbsent: () =&gt; 1,</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+            <span class="changedTokens"> ifAbsent:(
+          );
+        }
+        _totalFound += 1;
+        if (testedFiles.containsKey(file)) {
+          testedFiles[file]!.detectedCount += 1;
+        } else {
+          throw MutationError('"$file" was not registered in the reporter!',) =&gt; 1);</span></span></td></tr></table>
+
+</div></a><a name="162"><span class="lineNumber">     162 </span>          );</a>
+<a name="163"><span class="lineNumber">     163 </span>        }</a>
+<a name="164"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     164 </span>        _totalFound += 1;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalFound <span class="changedTokens">^</span>= 1;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalFound <span class="changedTokens">*</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalFound <span class="changedTokens">/</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalFound <span class="changedTokens">%</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         _totalFound <span class="changedTokens">-</span>= 1;</span></td></tr></table>
+
+</div></a><a name="165"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     165 </span>        if (testedFiles.containsKey(file)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(testedFiles.containsKey(file))) {</span></span></td></tr></table>
+
+</div></a><a name="166"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     166 </span>          testedFiles[file]!.detectedCount += 1;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.detectedCount <span class="changedTokens">^</span>= 1;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.detectedCount <span class="changedTokens">/</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.detectedCount <span class="changedTokens">*</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.detectedCount <span class="changedTokens">%</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]!.detectedCount <span class="changedTokens">-</span>= 1;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+           testedFiles[file]<span class="changedTokens"></span>.detectedCount += 1;</span></td></tr></table>
+
+</div></a><a name="167"><span class="lineNumber">     167 </span>        } else {</a>
+<a name="168"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     168 </span>          throw MutationError('"$file" was not registered in the reporter!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           throw MutationError('"$file" was not registered in the reporter<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="169"><span class="lineNumber">     169 </span>        }</a>
+<a name="170"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     170 </span>        addDetectedMutation(file, mutation);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> addDetectedMutation( mutation);
+        break;
+      case TestResult.Undetected:
+        if (verbose) {
+          print('Undetected mutation! All tests passed!',file);</span></span></td></tr></table>
+
+</div></a><a name="171"><span class="lineNumber">     171 </span>        break;</a>
+<a name="172"><span class="lineNumber">     172 </span>      case TestResult.Undetected:</a>
+<a name="173"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     173 </span>        if (verbose) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!(verbose)) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">if (!verbose) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> if (!(verbose)) {</span></span></td></tr></table>
+
+</div></a><a name="174"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     174 </span>          print('Undetected mutation! All tests passed!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+           print('Undetected mutation<span class="changedTokens"></span> All tests passed!');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+           print('Undetected mutation! All tests passed<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="175"><span class="lineNumber">     175 </span>        }</a>
+<a name="176"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     176 </span>        addUndetectedMutation(file, mutation);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+        <span class="changedTokens"> addUndetectedMutation( mutation,file);</span></span></td></tr></table>
+
+</div></a><a name="177"><span class="lineNumber">     177 </span>        break;</a>
+<a name="178"><span class="lineNumber">     178 </span>    }</a>
+<a name="179"><span class="lineNumber">     179 </span>  }</a>
+<a name="180"><span class="lineNumber">     180 </span></a>
+<a name="181"><span class="lineNumber">     181 </span>  /// Starts a test run on the file [path] with [count] mutations.</a>
+<a name="182"><span class="lineNumber">     182 </span>  /// The [contents] of the file are used for the html reporting.</a>
+<a name="183"><span class="lineNumber">     183 </span>  void startFileTest(String path, int count, String contents) {</a>
+<a name="184"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     184 </span>    if (testedFiles.containsKey(path)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(testedFiles.containsKey(path))) {</span></span></td></tr></table>
+
+</div></a><a name="185"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     185 </span>      testedFiles[path]!.mutationCount += count;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]!.mutationCount <span class="changedTokens">*</span>= count;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]!.mutationCount <span class="changedTokens">%</span>= count;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]!.mutationCount <span class="changedTokens">^</span>= count;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]!.mutationCount <span class="changedTokens">-</span>= count;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]!.mutationCount <span class="changedTokens">/</span>= count;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path]<span class="changedTokens"></span>.mutationCount += count;</span></td></tr></table>
+
+</div></a><a name="186"><span class="lineNumber">     186 </span>    } else {</a>
+<a name="187"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     187 </span>      testedFiles[path] = FileMutationResults(path, count, contents);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path] =<span class="changedTokens"> FileMutationResults( count,path, contents);</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[path] =<span class="changedTokens"> FileMutationResults(path, contents, count);</span></span></td></tr></table>
+
+</div></a><a name="188"><span class="lineNumber">     188 </span>    }</a>
+<a name="189"><span class="lineNumber">     189 </span>  }</a>
+<a name="190"><span class="lineNumber">     190 </span></a>
+<a name="191"><span class="lineNumber">     191 </span>  /// Reports the count of performed mutations.</a>
+<a name="192"><span class="lineNumber">     192 </span>  int get totalMutations =&gt; _totalRuns;</a>
+<a name="193"><span class="lineNumber">     193 </span></a>
+<a name="194"><span class="lineNumber">     194 </span>  /// Reports the count of test commands that timed out.</a>
+<a name="195"><span class="lineNumber">     195 </span>  int get totalTimeouts =&gt; _totalTimeouts;</a>
+<a name="196"><span class="lineNumber">     196 </span></a>
+<a name="197"><span class="lineNumber">     197 </span>  /// Reports the count of detected mutations.</a>
+<a name="198"><span class="lineNumber">     198 </span>  int get foundMutations =&gt; _totalFound;</a>
+<a name="199"><span class="lineNumber">     199 </span></a>
+<a name="200"><span class="lineNumber">     200 </span>  /// Reports the count of undetected mutations.</a>
+<a name="201"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     201 </span>  int get undetectedMutations =&gt; _totalRuns - _totalFound;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   int get undetectedMutations =&gt; _totalRuns <span class="changedTokens">^</span> _totalFound;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   int get undetectedMutations =&gt; _totalRuns <span class="changedTokens">/</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+   int get undetectedMutations =&gt; _totalRuns <span class="changedTokens">+</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+   int get undetectedMutations =&gt; _totalRuns <span class="changedTokens">*</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+   int get undetectedMutations =&gt; _totalRuns <span class="changedTokens">%</span> _totalFound;</span></td></tr></table>
+
+</div></a><a name="202"><span class="lineNumber">     202 </span></a>
+<a name="203"><span class="lineNumber">     203 </span>  /// Reports the percentage of undetected mutations of the total mutations.</a>
+<a name="204"><span class="lineNumber">     204 </span>  double get undetectedFraction =&gt;</a>
+<a name="205"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     205 </span>      _totalRuns &gt; 0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">!=</span>0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * undetectedMutations) <span class="changedTokens">%</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&lt;</span>0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; <span class="changedTokens">!0 ? (100.0 * undetectedMutations) / _totalRuns  : 0.0;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">+</span> undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">/</span> undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">==</span>0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&gt;=</span>0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&lt;=</span>0 ? (100.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * undetectedMutations) <span class="changedTokens">^</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">%</span> undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">^</span> undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">12 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? <span class="changedTokens">(-100</span>.0 * undetectedMutations) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">13 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; <span class="changedTokens">0 ? 0.0 : (100.0 * undetectedMutations) / _totalRuns ;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">14 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * undetectedMutations) <span class="changedTokens">+</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">15 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * undetectedMutations) <span class="changedTokens">-</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">16 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * undetectedMutations) <span class="changedTokens">*</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">17 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">-</span> undetectedMutations) / _totalRuns : 0.0;</span></td></tr></table>
+
+</div></a><a name="206"><span class="lineNumber">     206 </span></a>
+<a name="207"><span class="lineNumber">     207 </span>  /// Reports the percentage of detected mutations of the total mutations.</a>
+<a name="208"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     208 </span>  double get detectedFraction =&gt; _totalRuns &gt; 0</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns <span class="changedTokens">!=</span>0</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns &gt; <span class="changedTokens">0 ? 100.0 : 100.0 - (100.0 * undetectedMutations) / _totalRuns
+      ;
+
+  /// Reports the percentage of mutations that ran into the timeout.</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns <span class="changedTokens">&lt;=</span>0</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns <span class="changedTokens">==</span>0</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns <span class="changedTokens">&lt;</span>0</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns &gt; <span class="changedTokens">!0 ? 100.0 - (100.0 * undetectedMutations) / _totalRuns
+       : 100.0;
+
+  /// Reports the percentage of mutations that ran into the timeout.</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+   double get detectedFraction =&gt; _totalRuns <span class="changedTokens">&gt;=</span>0</span></td></tr></table>
+
+</div></a><a name="209"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     209 </span>      ? 100.0 - (100.0 * undetectedMutations) / _totalRuns</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 <span class="changedTokens">%</span> (100.0 * undetectedMutations) / _totalRuns</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ?<span class="changedTokens"> -100</span>.0 - (100.0 * undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 <span class="changedTokens">%</span> undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 <span class="changedTokens">+</span> undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 <span class="changedTokens">-</span> undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 <span class="changedTokens">/</span> undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 <span class="changedTokens">^</span> undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 * undetectedMutations) <span class="changedTokens">-</span> _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 <span class="changedTokens">^</span> (100.0 * undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 * undetectedMutations) <span class="changedTokens">*</span> _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 * undetectedMutations) <span class="changedTokens">+</span> _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 <span class="changedTokens">/</span> (100.0 * undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">12 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 * undetectedMutations) <span class="changedTokens">%</span> _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">13 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - (100.0 * undetectedMutations) <span class="changedTokens">^</span> _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">14 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 - <span class="changedTokens">(-100</span>.0 * undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">15 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 <span class="changedTokens">*</span> (100.0 * undetectedMutations) / _totalRuns</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">16 :</td><td class="mutationText" width="90%"><span class="addedLine">+       ? 100.0 <span class="changedTokens">+</span> (100.0 * undetectedMutations) / _totalRuns</span></td></tr></table>
+
+</div></a><a name="210"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     210 </span>      : 100.0;</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       :<span class="changedTokens"> -100</span>.0;</span></td></tr></table>
+
+</div></a><a name="211"><span class="lineNumber">     211 </span></a>
+<a name="212"><span class="lineNumber">     212 </span>  /// Reports the percentage of mutations that ran into the timeout.</a>
+<a name="213"><span class="lineNumber">     213 </span>  double get timeoutFraction =&gt;</a>
+<a name="214"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     214 </span>      _totalRuns &gt; 0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">/</span> totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">!=</span>0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">+</span> totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * totalTimeouts) <span class="changedTokens">*</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * totalTimeouts) <span class="changedTokens">+</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * totalTimeouts) <span class="changedTokens">-</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * totalTimeouts) <span class="changedTokens">%</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 * totalTimeouts) <span class="changedTokens">^</span> _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? <span class="changedTokens">(-100</span>.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; <span class="changedTokens">!0 ? (100.0 * totalTimeouts) / _totalRuns  : 0.0;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">-</span> totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">%</span> totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; 0 ? (100.0 <span class="changedTokens">^</span> totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">12 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&gt;=</span>0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">13 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">==</span>0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">14 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns &gt; <span class="changedTokens">0 ? 0.0 : (100.0 * totalTimeouts) / _totalRuns ;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">15 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&lt;=</span>0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">16 :</td><td class="mutationText" width="90%"><span class="addedLine">+       _totalRuns <span class="changedTokens">&lt;</span>0 ? (100.0 * totalTimeouts) / _totalRuns : 0.0;</span></td></tr></table>
+
+</div></a><a name="215"><span class="lineNumber">     215 </span></a>
+<a name="216"><span class="lineNumber">     216 </span>  /// Checks if the test run was successful.</a>
+<a name="217"><span class="lineNumber">     217 </span>  bool get success =&gt; quality.isSuccessful(detectedFraction);</a>
+<a name="218"><span class="lineNumber">     218 </span></a>
+<a name="219"><span class="lineNumber">     219 </span>  /// Gets the quality rating for this run.</a>
+<a name="220"><span class="lineNumber">     220 </span>  String get rating =&gt; quality.rating(detectedFraction);</a>
+<a name="221"><span class="lineNumber">     221 </span></a>
+<a name="222"><span class="lineNumber">     222 </span>  /// Prints the statistics at the end of the execution.</a>
+<a name="223"><span class="lineNumber">     223 </span>  void write() {</a>
+<a name="224"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     224 </span>    print('  --- Results ---');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --- Results --<span class="changedTokens">/</span>');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --<span class="changedTokens">+</span> Results ---');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --<span class="changedTokens">*</span> Results ---');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --<span class="changedTokens">/</span> Results ---');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --<span class="changedTokens">%</span> Results ---');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --<span class="changedTokens">^</span> Results ---');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --- Results --<span class="changedTokens">+</span>');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --- Results --<span class="changedTokens">*</span>');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --- Results --<span class="changedTokens">%</span>');</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     print('  --- Results --<span class="changedTokens">^</span>');</span></td></tr></table>
+
+</div></a><a name="225"><span class="lineNumber">     225 </span>    print('Test group statistics:');</a>
+<a name="226"><span class="lineNumber">     226 </span>    _groupStatistics</a>
+<a name="227"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     227 </span>        .forEach((k, v) =&gt; print('  Group : $k, Found mutations: $v'));</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         .forEach((k, v) =&gt;<span class="changedTokens"> print( Found mutations: $v'),'  Group : $k);</span></span></td></tr></table>
+
+</div></a><a name="228"><span class="lineNumber">     228 </span>    print(</a>
+<a name="229"><span class="lineNumber">     229 </span>      '\nTotal tests: $_totalRuns\nUndetected Mutations: $undetectedMutations '</a>
+<a name="230"><span class="lineNumber">     230 </span>      '(${asPercentString(undetectedMutations, _totalRuns)})',</a>
+<a name="231"><span class="lineNumber">     231 </span>    );</a>
+<a name="232"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     232 </span>    print('Timeouts: $_totalTimeouts');</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> print( Quality rating: $rating','Timeouts: $_totalTimeouts');
+    print('Elapsed: $elapsed');
+    print('Success: $success);</span></span></td></tr></table>
+
+</div></a><a name="233"><span class="lineNumber">     233 </span>    print('Elapsed: $elapsed');</a>
+<a name="234"><span class="lineNumber">     234 </span>    print('Success: $success, Quality rating: $rating');</a>
+<a name="235"><span class="lineNumber">     235 </span>  }</a>
+<a name="236"><span class="lineNumber">     236 </span></a>
+<a name="237"><span class="lineNumber">     237 </span>  /// Sorts mutations by lines.</a>
+<a name="238"><span class="lineNumber">     238 </span>  void sort() {</a>
+<a name="239"><span class="lineNumber">     239 </span>    testedFiles.forEach((key, value) {</a>
+<a name="240"><span class="lineNumber">     240 </span>      value.undetectedMutations</a>
+<a name="241"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     241 </span>          .sort((lhs, rhs) =&gt; lhs.line.compareTo(rhs.line));</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+          <span class="changedTokens"> .sort( rhs) =&gt; lhs.line.compareTo(rhs.line),(lhs);</span></span></td></tr></table>
+
+</div></a><a name="242"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     242 </span>      value.detectedMutations.sort((lhs, rhs) =&gt; lhs.line.compareTo(rhs.line));</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+      <span class="changedTokens"> value.detectedMutations.sort( rhs) =&gt; lhs.line.compareTo(rhs.line),(lhs);</span></span></td></tr></table>
+
+</div></a><a name="243"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     243 </span>      value.timeoutMutations.sort((lhs, rhs) =&gt; lhs.line.compareTo(rhs.line));</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+      <span class="changedTokens"> value.timeoutMutations.sort( rhs) =&gt; lhs.line.compareTo(rhs.line));
+    },(lhs);</span></span></td></tr></table>
+
+</div></a><a name="244"><span class="lineNumber">     244 </span>    });</a>
+<a name="245"><span class="lineNumber">     245 </span>  }</a>
+<a name="246"><span class="lineNumber">     246 </span></a>
+<a name="247"><span class="lineNumber">     247 </span>  /// Checks if all mutations were found.</a>
+<a name="248"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     248 </span>  bool get foundAll =&gt; _totalRuns == _totalFound;</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool get foundAll =&gt; _totalRuns <span class="changedTokens">!=</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool get foundAll =&gt; _totalRuns <span class="changedTokens">&gt;</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool get foundAll =&gt; _totalRuns <span class="changedTokens">&gt;=</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool get foundAll =&gt; _totalRuns <span class="changedTokens">&lt;=</span> _totalFound;</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+   bool get foundAll =&gt; _totalRuns <span class="changedTokens">&lt;</span> _totalFound;</span></td></tr></table>
+
+</div></a><a name="249"><span class="lineNumber">     249 </span></a>
+<a name="250"><span class="lineNumber">     250 </span>  /// Adds the undetected [mutation] from [file] to the list.</a>
+<a name="251"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     251 </span>  void addUndetectedMutation(String file, MutatedLine mutation) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> addUndetectedMutation( MutatedLine mutation) {
+    if (testedFiles.containsKey(file)) {
+      testedFiles[file]!.undetectedMutations.add(mutation);
+    } else {
+      throw MutationError('"$file" was not registered in the reporter!',String file);</span></span></td></tr></table>
+
+</div></a><a name="252"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     252 </span>    if (testedFiles.containsKey(file)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(testedFiles.containsKey(file))) {</span></span></td></tr></table>
+
+</div></a><a name="253"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     253 </span>      testedFiles[file]!.undetectedMutations.add(mutation);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[file]<span class="changedTokens"></span>.undetectedMutations.add(mutation);</span></td></tr></table>
+
+</div></a><a name="254"><span class="lineNumber">     254 </span>    } else {</a>
+<a name="255"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     255 </span>      throw MutationError('"$file" was not registered in the reporter!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       throw MutationError('"$file" was not registered in the reporter<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="256"><span class="lineNumber">     256 </span>    }</a>
+<a name="257"><span class="lineNumber">     257 </span>  }</a>
+<a name="258"><span class="lineNumber">     258 </span></a>
+<a name="259"><span class="lineNumber">     259 </span>  /// Adds the detected [mutation] from [file] to the list.</a>
+<a name="260"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     260 </span>  void addDetectedMutation(String file, MutatedLine mutation) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> addDetectedMutation( MutatedLine mutation) {
+    if (testedFiles.containsKey(file)) {
+      testedFiles[file]!.detectedMutations.add(mutation);
+    } else {
+      throw MutationError('"$file" was not registered in the reporter!',String file);</span></span></td></tr></table>
+
+</div></a><a name="261"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     261 </span>    if (testedFiles.containsKey(file)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(testedFiles.containsKey(file))) {</span></span></td></tr></table>
+
+</div></a><a name="262"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     262 </span>      testedFiles[file]!.detectedMutations.add(mutation);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[file]<span class="changedTokens"></span>.detectedMutations.add(mutation);</span></td></tr></table>
+
+</div></a><a name="263"><span class="lineNumber">     263 </span>    } else {</a>
+<a name="264"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     264 </span>      throw MutationError('"$file" was not registered in the reporter!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       throw MutationError('"$file" was not registered in the reporter<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="265"><span class="lineNumber">     265 </span>    }</a>
+<a name="266"><span class="lineNumber">     266 </span>  }</a>
+<a name="267"><span class="lineNumber">     267 </span></a>
+<a name="268"><span class="lineNumber">     268 </span>  /// Adds a [mutation] from [file] to the timeout list.</a>
+<a name="269"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     269 </span>  void addTimeoutMutation(String file, MutatedLine mutation) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> addTimeoutMutation( MutatedLine mutation) {
+    if (testedFiles.containsKey(file)) {
+      testedFiles[file]!.timeoutMutations.add(mutation);
+    } else {
+      throw MutationError('"$file" was not registered in the reporter!',String file);</span></span></td></tr></table>
+
+</div></a><a name="270"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     270 </span>    if (testedFiles.containsKey(file)) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(testedFiles.containsKey(file))) {</span></span></td></tr></table>
+
+</div></a><a name="271"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     271 </span>      testedFiles[file]!.timeoutMutations.add(mutation);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       testedFiles[file]<span class="changedTokens"></span>.timeoutMutations.add(mutation);</span></td></tr></table>
+
+</div></a><a name="272"><span class="lineNumber">     272 </span>    } else {</a>
+<a name="273"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     273 </span>      throw MutationError('"$file" was not registered in the reporter!');</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       throw MutationError('"$file" was not registered in the reporter<span class="changedTokens"></span>');</span></td></tr></table>
+
+</div></a><a name="274"><span class="lineNumber">     274 </span>    }</a>
+<a name="275"><span class="lineNumber">     275 </span>  }</a>
+<a name="276"><span class="lineNumber">     276 </span></a>
+<a name="277"><span class="lineNumber">     277 </span>  /// Creates the XML report string</a>
+<a name="278"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     278 </span>  String createXMLReport() {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   String<span class="changedTokens"> createXMLReport( value) {
+      text += '&lt;file name="$key"&gt;\n';
+      for (final mut in value.undetectedMutations) {
+        text += '&lt;mutation line="${mut.line}"&gt;\n';
+        text += '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';
+        text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';
+        text += '&lt;/mutation&gt;\n';
+      }
+      text += '&lt;/file&gt;\n';
+    },) {
+    var text =
+        '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected-mutations&gt;\n';
+    text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';
+    text += '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';
+    text += '&lt;result rating="$rating" success="$success"/&gt;\n';
+    text += '&lt;rules&gt;\n';
+    for (final element in xmlFiles) {
+      text += '&lt;ruleset document="$element"/&gt;';
+    }
+    text += '&lt;/rules&gt;\n';
+    testedFiles.forEach((key);</span></span></td></tr></table>
+
+</div></a><a name="279"><span class="lineNumber">     279 </span>    var text =</a>
+<a name="280"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     280 </span>        '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected-mutations&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected<span class="changedTokens">%</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">!'&lt; ? xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected-mutations&gt;\n';
+    text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';
+    text += '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';
+    text += '&lt;result rating="$rating" success="$success"/&gt;\n';
+    text += '&lt;rules&gt;\n';
+    for (final element in xmlFiles) {
+      text += '&lt;ruleset document="$element"/&gt;';
+    }
+    text += '&lt;/rules&gt;\n';
+    testedFiles.forEach((key, value) {
+      text += '&lt;file name="$key"&gt;\n';
+      for (final mut in value.undetectedMutations) {
+        text += '&lt;mutation line="${mut.line}"&gt;\n';
+        text += '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';
+        text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';
+        text += '&lt;/mutation&gt;\n';
+      }
+      text += '&lt;/file&gt;\n';
+    });
+    return '$text&lt;/undetected-mutations&gt;\n';
+  }
+
+  /// Writes the results of the tests to a xml file in directory [outpath].
+  /// The report will be named like the [input], but ending with "-report.xml".
+  void writeXMLReport(String outpath, String input) {
+    final text = createXMLReport();
+    final name =
+        createReportFileName(_sanitizeInputFile(input), outpath, 'xml');
+    _createPathsAndWriteFile(name, text);
+  }
+
+  /// Creates the markdown report string
+  String createMarkdownReport() {
+    var text = _createMarkdownHeader();
+    testedFiles.forEach((key, value) {
+      text += '## Undetected mutations in file  : $key\n';</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected<span class="changedTokens">/</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         <span class="changedTokens">'&lt; ? $key\n' : xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected-mutations&gt;\n';
+    text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';
+    text += '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';
+    text += '&lt;result rating="$rating" success="$success"/&gt;\n';
+    text += '&lt;rules&gt;\n';
+    for (final element in xmlFiles) {
+      text += '&lt;ruleset document="$element"/&gt;';
+    }
+    text += '&lt;/rules&gt;\n';
+    testedFiles.forEach((key, value) {
+      text += '&lt;file name="$key"&gt;\n';
+      for (final mut in value.undetectedMutations) {
+        text += '&lt;mutation line="${mut.line}"&gt;\n';
+        text += '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';
+        text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';
+        text += '&lt;/mutation&gt;\n';
+      }
+      text += '&lt;/file&gt;\n';
+    });
+    return '$text&lt;/undetected-mutations&gt;\n';
+  }
+
+  /// Writes the results of the tests to a xml file in directory [outpath].
+  /// The report will be named like the [input], but ending with "-report.xml".
+  void writeXMLReport(String outpath, String input) {
+    final text = createXMLReport();
+    final name =
+        createReportFileName(_sanitizeInputFile(input), outpath, 'xml');
+    _createPathsAndWriteFile(name, text);
+  }
+
+  /// Creates the markdown report string
+  String createMarkdownReport() {
+    var text = _createMarkdownHeader();
+    testedFiles.forEach((key, value) {
+      text += '## Undetected mutations in file ;</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF<span class="changedTokens">/</span>8"?&gt;\n&lt;undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected<span class="changedTokens">*</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected<span class="changedTokens">^</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF<span class="changedTokens">+</span>8"?&gt;\n&lt;undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF<span class="changedTokens">*</span>8"?&gt;\n&lt;undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF<span class="changedTokens">%</span>8"?&gt;\n&lt;undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF<span class="changedTokens">^</span>8"?&gt;\n&lt;undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">12 :</td><td class="mutationText" width="90%"><span class="addedLine">+         '&lt;?xml version="1.0" encoding="UTF-8"?&gt;\n&lt;undetected<span class="changedTokens">+</span>mutations&gt;\n';</span></td></tr></table>
+
+</div></a><a name="281"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     281 </span>    text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program<span class="changedTokens">*</span>version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;<span class="changedTokens">*</span>program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;<span class="changedTokens">+</span>program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;<span class="changedTokens">^</span>program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;<span class="changedTokens">-</span>program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;<span class="changedTokens">%</span>program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program<span class="changedTokens">+</span>version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program<span class="changedTokens">^</span>version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">-</span>= '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">^</span>= '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program<span class="changedTokens">%</span>version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">12 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">*</span>= '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">13 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program<span class="changedTokens">^</span>version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">14 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program<span class="changedTokens">/</span>version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">15 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program<span class="changedTokens">*</span>version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">16 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program<span class="changedTokens">+</span>version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">17 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program<span class="changedTokens">%</span>version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">18 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;program-version&gt;${mutationTestVersion()}&lt;/program<span class="changedTokens">/</span>version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">19 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">%</span>= '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">20 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">/</span>= '&lt;program-version&gt;${mutationTestVersion()}&lt;/program-version&gt;\n';</span></td></tr></table>
+
+</div></a><a name="282"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     282 </span>    text += '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">%</span>= '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">^</span>= '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;elapsed&gt;$elapsed&lt;<span class="changedTokens">^</span>elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;elapsed&gt;$elapsed&lt;<span class="changedTokens">%</span>elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;elapsed&gt;$elapsed&lt;<span class="changedTokens">-</span>elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;elapsed&gt;$elapsed&lt;<span class="changedTokens">+</span>elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;elapsed&gt;$elapsed&lt;<span class="changedTokens">*</span>elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">/</span>= '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">*</span>= '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">-</span>= '&lt;elapsed&gt;$elapsed&lt;/elapsed&gt;\n';</span></td></tr></table>
+
+</div></a><a name="283"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     283 </span>    text += '&lt;result rating="$rating" success="$success"/&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">%</span>= '&lt;result rating="$rating" success="$success"/&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">/</span>= '&lt;result rating="$rating" success="$success"/&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">-</span>= '&lt;result rating="$rating" success="$success"/&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;result rating="$rating" success="$success"<span class="changedTokens">^</span>&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;result rating="$rating" success="$success"<span class="changedTokens">%</span>&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;result rating="$rating" success="$success"<span class="changedTokens">-</span>&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;result rating="$rating" success="$success"<span class="changedTokens">+</span>&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;result rating="$rating" success="$success"<span class="changedTokens">*</span>&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">^</span>= '&lt;result rating="$rating" success="$success"/&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">*</span>= '&lt;result rating="$rating" success="$success"/&gt;\n';</span></td></tr></table>
+
+</div></a><a name="284"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     284 </span>    text += '&lt;rules&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">^</span>= '&lt;rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">%</span>= '&lt;rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">/</span>= '&lt;rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">*</span>= '&lt;rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">-</span>= '&lt;rules&gt;\n';</span></td></tr></table>
+
+</div></a><a name="285"><span class="lineNumber">     285 </span>    for (final element in xmlFiles) {</a>
+<a name="286"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     286 </span>      text += '&lt;ruleset document="$element"/&gt;';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;ruleset document="$element"<span class="changedTokens">^</span>&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;ruleset document="$element"<span class="changedTokens">%</span>&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;ruleset document="$element"<span class="changedTokens">-</span>&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;ruleset document="$element"<span class="changedTokens">+</span>&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;ruleset document="$element"<span class="changedTokens">*</span>&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">^</span>= '&lt;ruleset document="$element"/&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">%</span>= '&lt;ruleset document="$element"/&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">/</span>= '&lt;ruleset document="$element"/&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">*</span>= '&lt;ruleset document="$element"/&gt;';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">-</span>= '&lt;ruleset document="$element"/&gt;';</span></td></tr></table>
+
+</div></a><a name="287"><span class="lineNumber">     287 </span>    }</a>
+<a name="288"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     288 </span>    text += '&lt;/rules&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;<span class="changedTokens">%</span>rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;<span class="changedTokens">-</span>rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;<span class="changedTokens">+</span>rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;<span class="changedTokens">*</span>rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">^</span>= '&lt;/rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">%</span>= '&lt;/rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">/</span>= '&lt;/rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">*</span>= '&lt;/rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text <span class="changedTokens">-</span>= '&lt;/rules&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     text += '&lt;<span class="changedTokens">^</span>rules&gt;\n';</span></td></tr></table>
+
+</div></a><a name="289"><span class="lineNumber">     289 </span>    testedFiles.forEach((key, value) {</a>
+<a name="290"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     290 </span>      text += '&lt;file name="$key"&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">^</span>= '&lt;file name="$key"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">*</span>= '&lt;file name="$key"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">/</span>= '&lt;file name="$key"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">%</span>= '&lt;file name="$key"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">-</span>= '&lt;file name="$key"&gt;\n';</span></td></tr></table>
+
+</div></a><a name="291"><span class="lineNumber">     291 </span>      for (final mut in value.undetectedMutations) {</a>
+<a name="292"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     292 </span>        text += '&lt;mutation line="${mut.line}"&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">^</span>= '&lt;mutation line="${mut.line}"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">%</span>= '&lt;mutation line="${mut.line}"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">-</span>= '&lt;mutation line="${mut.line}"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">*</span>= '&lt;mutation line="${mut.line}"&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">/</span>= '&lt;mutation line="${mut.line}"&gt;\n';</span></td></tr></table>
+
+</div></a><a name="293"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     293 </span>        text += '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;original&gt;${convertToXML(mut.original)}&lt;<span class="changedTokens">%</span>original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">/</span>= '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;original&gt;${convertToXML(mut.original)}&lt;<span class="changedTokens">^</span>original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">^</span>= '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">-</span>= '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;original&gt;${convertToXML(mut.original)}&lt;<span class="changedTokens">-</span>original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;original&gt;${convertToXML(mut.original)}&lt;<span class="changedTokens">+</span>original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;original&gt;${convertToXML(mut.original)}&lt;<span class="changedTokens">*</span>original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">*</span>= '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">%</span>= '&lt;original&gt;${convertToXML(mut.original)}&lt;/original&gt;\n';</span></td></tr></table>
+
+</div></a><a name="294"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     294 </span>        text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">%</span>= '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">^</span>= '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;<span class="changedTokens">-</span>modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;<span class="changedTokens">%</span>modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;<span class="changedTokens">*</span>modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;<span class="changedTokens">^</span>modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">*</span>= '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">-</span>= '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;<span class="changedTokens">+</span>modified&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">/</span>= '&lt;modified&gt;${convertToXML(mut.mutated)}&lt;/modified&gt;\n';</span></td></tr></table>
+
+</div></a><a name="295"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     295 </span>        text += '&lt;/mutation&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;<span class="changedTokens">-</span>mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;<span class="changedTokens">^</span>mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">^</span>= '&lt;/mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">-</span>= '&lt;/mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">/</span>= '&lt;/mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;<span class="changedTokens">%</span>mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">%</span>= '&lt;/mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;<span class="changedTokens">*</span>mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text += '&lt;<span class="changedTokens">+</span>mutation&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">*</span>= '&lt;/mutation&gt;\n';</span></td></tr></table>
+
+</div></a><a name="296"><span class="lineNumber">     296 </span>      }</a>
+<a name="297"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     297 </span>      text += '&lt;/file&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">%</span>= '&lt;/file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">*</span>= '&lt;/file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;<span class="changedTokens">*</span>file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;<span class="changedTokens">^</span>file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;<span class="changedTokens">%</span>file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;<span class="changedTokens">-</span>file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text += '&lt;<span class="changedTokens">+</span>file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">-</span>= '&lt;/file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">/</span>= '&lt;/file&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">^</span>= '&lt;/file&gt;\n';</span></td></tr></table>
+
+</div></a><a name="298"><span class="lineNumber">     298 </span>    });</a>
+<a name="299"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     299 </span>    return '$text&lt;/undetected-mutations&gt;\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;/undetected<span class="changedTokens">%</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;<span class="changedTokens">%</span>undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;/undetected<span class="changedTokens">/</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;/undetected<span class="changedTokens">*</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;/undetected<span class="changedTokens">+</span>mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;<span class="changedTokens">^</span>undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;<span class="changedTokens">-</span>undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;<span class="changedTokens">+</span>undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;<span class="changedTokens">*</span>undetected-mutations&gt;\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return '$text&lt;/undetected<span class="changedTokens">^</span>mutations&gt;\n';</span></td></tr></table>
+
+</div></a><a name="300"><span class="lineNumber">     300 </span>  }</a>
+<a name="301"><span class="lineNumber">     301 </span></a>
+<a name="302"><span class="lineNumber">     302 </span>  /// Writes the results of the tests to a xml file in directory [outpath].</a>
+<a name="303"><span class="lineNumber">     303 </span>  /// The report will be named like the [input], but ending with "-report.xml".</a>
+<a name="304"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     304 </span>  void writeXMLReport(String outpath, String input) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> writeXMLReport( String input) {
+    final text = createXMLReport(,String outpath);</span></span></td></tr></table>
+
+</div></a><a name="305"><span class="lineNumber">     305 </span>    final text = createXMLReport();</a>
+<a name="306"><span class="lineNumber">     306 </span>    final name =</a>
+<a name="307"><span class="lineNumber">     307 </span>        createReportFileName(_sanitizeInputFile(input), outpath, 'xml');</a>
+<a name="308"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     308 </span>    _createPathsAndWriteFile(name, text);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> _createPathsAndWriteFile( text);
+  }
+
+  /// Creates the markdown report string
+  String createMarkdownReport() {
+    var text = _createMarkdownHeader(,name);</span></span></td></tr></table>
+
+</div></a><a name="309"><span class="lineNumber">     309 </span>  }</a>
+<a name="310"><span class="lineNumber">     310 </span></a>
+<a name="311"><span class="lineNumber">     311 </span>  /// Creates the markdown report string</a>
+<a name="312"><span class="lineNumber">     312 </span>  String createMarkdownReport() {</a>
+<a name="313"><span class="lineNumber">     313 </span>    var text = _createMarkdownHeader();</a>
+<a name="314"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     314 </span>    testedFiles.forEach((key, value) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> testedFiles.forEach( value) {
+      text += '## Undetected mutations in file : $key\n';
+      for (final mut in value.undetectedMutations) {
+        text += mut.toMarkdown();
+      }
+      text += '\n\n';
+    },(key);</span></span></td></tr></table>
+
+</div></a><a name="315"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     315 </span>      text += '## Undetected mutations in file : $key\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">/</span>= '## Undetected mutations in file : $key\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">^</span>= '## Undetected mutations in file : $key\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">*</span>= '## Undetected mutations in file : $key\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">-</span>= '## Undetected mutations in file : $key\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">%</span>= '## Undetected mutations in file : $key\n';</span></td></tr></table>
+
+</div></a><a name="316"><span class="lineNumber">     316 </span>      for (final mut in value.undetectedMutations) {</a>
+<a name="317"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     317 </span>        text += mut.toMarkdown();</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">*</span>= mut.toMarkdown();</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">/</span>= mut.toMarkdown();</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">-</span>= mut.toMarkdown();</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">^</span>= mut.toMarkdown();</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+         text <span class="changedTokens">%</span>= mut.toMarkdown();</span></td></tr></table>
+
+</div></a><a name="318"><span class="lineNumber">     318 </span>      }</a>
+<a name="319"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     319 </span>      text += '\n\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">^</span>= '\n\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">-</span>= '\n\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">*</span>= '\n\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">/</span>= '\n\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       text <span class="changedTokens">%</span>= '\n\n';</span></td></tr></table>
+
+</div></a><a name="320"><span class="lineNumber">     320 </span>    });</a>
+<a name="321"><span class="lineNumber">     321 </span>    return text;</a>
+<a name="322"><span class="lineNumber">     322 </span>  }</a>
+<a name="323"><span class="lineNumber">     323 </span></a>
+<a name="324"><span class="lineNumber">     324 </span>  /// Writes the results of the tests to a markdown file in directory [outpath].</a>
+<a name="325"><span class="lineNumber">     325 </span>  /// The report will be named like the [input], but ending with "-report.md".</a>
+<a name="326"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     326 </span>  void writeMarkdownReport(String outpath, String input) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> writeMarkdownReport( String input) {
+    final text = createMarkdownReport(,String outpath);</span></span></td></tr></table>
+
+</div></a><a name="327"><span class="lineNumber">     327 </span>    final text = createMarkdownReport();</a>
+<a name="328"><span class="lineNumber">     328 </span>    final name = createReportFileName(_sanitizeInputFile(input), outpath, 'md');</a>
+<a name="329"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     329 </span>    _createPathsAndWriteFile(name, text);</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> _createPathsAndWriteFile( text,name);</span></span></td></tr></table>
+
+</div></a><a name="330"><span class="lineNumber">     330 </span>  }</a>
+<a name="331"><span class="lineNumber">     331 </span></a>
+<a name="332"><span class="lineNumber">     332 </span>  /// Writes the results of the tests to a html file in directory [outpath].</a>
+<a name="333"><span class="lineNumber">     333 </span>  /// The report will be named like the [input], but ending with "-report.html".</a>
+<a name="334"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     334 </span>  void writeHTMLReport(String outpath, String input) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   void<span class="changedTokens"> writeHTMLReport( String input) {
+    final index = createToplevelHtmlFile(this,String outpath);</span></span></td></tr></table>
+
+</div></a><a name="335"><span class="lineNumber">     335 </span>    final index = createToplevelHtmlFile(this);</a>
+<a name="336"><span class="lineNumber">     336 </span>    final fname =</a>
+<a name="337"><span class="lineNumber">     337 </span>        createReportFileName(_sanitizeInputFile(input), outpath, 'html');</a>
+<a name="338"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     338 </span>    _createPathsAndWriteFile(fname, index);</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> _createPathsAndWriteFile( index,fname);</span></span></td></tr></table>
+
+</div></a><a name="339"><span class="lineNumber">     339 </span>    testedFiles.forEach((key, value) {</a>
+<a name="340"><span class="lineNumber">     340 </span>      final contents = createSourceHtmlFile(this, value, basename(fname));</a>
+<a name="341"><span class="lineNumber">     341 </span>      final sname = createReportFileName(</a>
+<a name="342"><span class="lineNumber">     342 </span>        key,</a>
+<a name="343"><span class="lineNumber">     343 </span>        outpath,</a>
+<a name="344"><span class="lineNumber">     344 </span>        'html',</a>
+<a name="345"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     345 </span>        appendReport: false,</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         appendReport: <span class="changedTokens">true</span>,</span></td></tr></table>
+
+</div></a><a name="346"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     346 </span>        removeInputExt: false,</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         removeInputExt: <span class="changedTokens">true</span>,</span></td></tr></table>
+
+</div></a><a name="347"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     347 </span>        removePathsFromInput: false,</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         removePathsFromInput: <span class="changedTokens">true</span>,</span></td></tr></table>
+
+</div></a><a name="348"><span class="lineNumber">     348 </span>      );</a>
+<a name="349"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     349 </span>      _createPathsAndWriteFile(sname, contents);</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+      <span class="changedTokens"> _createPathsAndWriteFile( contents);
+    },sname);</span></span></td></tr></table>
+
+</div></a><a name="350"><span class="lineNumber">     350 </span>    });</a>
+<a name="351"><span class="lineNumber">     351 </span>  }</a>
+<a name="352"><span class="lineNumber">     352 </span></a>
+<a name="353"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     353 </span>  String _sanitizeInputFile(String input) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+   String<span class="changedTokens"> _sanitizeInputFile( String text) {
+    final dir = getDirectory(path);
+    if (dir.isNotEmpty) {
+      if (!Directory(dir).existsSync()) {
+        Directory(dir).createSync(recursive: true);
+      }
+    }
+    File(path).writeAsStringSync(text,String input) {
+    if (input.isNotEmpty) {
+      return input;
+    }
+    return 'mutation-test';
+  }
+
+  void _createPathsAndWriteFile(String path);</span></span></td></tr></table>
+
+</div></a><a name="354"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     354 </span>    if (input.isNotEmpty) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(input.isNotEmpty)) {</span></span></td></tr></table>
+
+</div></a><a name="355"><span class="lineNumber">     355 </span>      return input;</a>
+<a name="356"><span class="lineNumber">     356 </span>    }</a>
+<a name="357"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     357 </span>    return 'mutation-test';</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return 'mutation<span class="changedTokens">^</span>test';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return 'mutation<span class="changedTokens">%</span>test';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return 'mutation<span class="changedTokens">/</span>test';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return 'mutation<span class="changedTokens">*</span>test';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     return 'mutation<span class="changedTokens">+</span>test';</span></td></tr></table>
+
+</div></a><a name="358"><span class="lineNumber">     358 </span>  }</a>
+<a name="359"><span class="lineNumber">     359 </span></a>
+<a name="360"><span class="lineNumber">     360 </span>  void _createPathsAndWriteFile(String path, String text) {</a>
+<a name="361"><span class="lineNumber">     361 </span>    final dir = getDirectory(path);</a>
+<a name="362"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     362 </span>    if (dir.isNotEmpty) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> if (!(dir.isNotEmpty)) {</span></span></td></tr></table>
+
+</div></a><a name="363"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     363 </span>      if (!Directory(dir).existsSync()) {</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+      <span class="changedTokens"> if (!(!Directory(dir).existsSync())) {</span></span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (<span class="changedTokens"></span>Directory(dir).existsSync()) {</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       if (<span class="changedTokens">Directory</span>(dir).existsSync()) {</span></td></tr></table>
+
+</div></a><a name="364"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     364 </span>        Directory(dir).createSync(recursive: true);</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+         Directory(dir).createSync(recursive: <span class="changedTokens">false</span>);</span></td></tr></table>
+
+</div></a><a name="365"><span class="lineNumber">     365 </span>      }</a>
+<a name="366"><span class="lineNumber">     366 </span>    }</a>
+<a name="367"><span class="lineNumber">     367 </span>    File(path).writeAsStringSync(text);</a>
+<a name="368"><span class="lineNumber">     368 </span>  }</a>
+<a name="369"><span class="lineNumber">     369 </span></a>
+<a name="370"><span class="lineNumber">     370 </span>  String _createMarkdownHeader() {</a>
+<a name="371"><span class="lineNumber">     371 </span>    var rv = '''</a>
+<a name="372"><span class="lineNumber">     372 </span># Mutation report</a>
+<a name="373"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     373 </span>This is a mutation report generated by ${mutationTestVersion()}</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ Th<span class="changedTokens">is! is</span> a mutation report generated by ${mutationTestVersion()}</span></td></tr></table>
+
+</div></a><a name="374"><span class="lineNumber">     374 </span></a>
+<a name="375"><span class="lineNumber">     375 </span>${DateTime.now()}</a>
+<a name="376"><span class="lineNumber">     376 </span></a>
+<a name="377"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     377 </span>| Key           | Value                     |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ <span class="changedTokens">|!( Key           )|</span> Value                     |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Key           | Value                     <span class="changedTokens"></span>|!(</span></td></tr></table>
+
+</div></a><a name="378"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     378 </span>| ------------- | ------------------------- |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- | ------------------------<span class="changedTokens">+</span> |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------<span class="changedTokens">+</span> | ------------------------- |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------<span class="changedTokens">*</span> | ------------------------- |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------<span class="changedTokens">%</span> | ------------------------- |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------<span class="changedTokens">^</span> | ------------------------- |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- | ------------------------<span class="changedTokens">*</span> |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- | ------------------------<span class="changedTokens">/</span> |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">8 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- | ------------------------<span class="changedTokens">%</span> |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">9 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------<span class="changedTokens">/</span> | ------------------------- |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">10 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- | ------------------------<span class="changedTokens">^</span> |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">11 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | ------------- <span class="changedTokens">|!( ------------------------- )|</span></span></td></tr></table>
+
+</div></a><a name="379"><span class="lineNumber">     379 </span>''';</a>
+<a name="380"><span class="lineNumber">     380 </span>    for (final element in xmlFiles) {</a>
+<a name="381"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     381 </span>      rv += '| Rules         | $element           |\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv += '| Rules         | $element           <span class="changedTokens"></span>|!(\n';
+    }
+    rv += '''</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv += '<span class="changedTokens">|!( Rules         )|</span> $element           |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">*</span>= '| Rules         | $element           |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">/</span>= '| Rules         | $element           |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">%</span>= '| Rules         | $element           |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">^</span>= '| Rules         | $element           |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">-</span>= '| Rules         | $element           |\n';</span></td></tr></table>
+
+</div></a><a name="382"><span class="lineNumber">     382 </span>    }</a>
+<a name="383"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     383 </span>    rv += '''</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">-</span>= '''</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">/</span>= '''</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">%</span>= '''</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">^</span>= '''</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">*</span>= '''</span></td></tr></table>
+
+</div></a><a name="384"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     384 </span>| Mutations     | $_totalRuns                        |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Mutations     <span class="changedTokens">|!( $_totalRuns                        )|</span></span></td></tr></table>
+
+</div></a><a name="385"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     385 </span>| Elapsed     | $elapsed                        |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ <span class="changedTokens">|!( Elapsed     )|</span> $elapsed                        |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Elapsed     | $elapsed                        <span class="changedTokens"></span>|!(</span></td></tr></table>
+
+</div></a><a name="386"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     386 </span>| Timeouts      | $_totalTimeouts                        |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Timeouts      <span class="changedTokens">|!( $_totalTimeouts                        )|</span></span></td></tr></table>
+
+</div></a><a name="387"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     387 </span>| Undetected    | $undetectedMutations                        |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected    | $undetectedMutations                        <span class="changedTokens"></span>|!(</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+ <span class="changedTokens">|!( Undetected    )|</span> $undetectedMutations                        |</span></td></tr></table>
+
+</div></a><a name="388"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     388 </span>| Undetected%   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected<span class="changedTokens">^</span>   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected<span class="changedTokens">-</span>   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected<span class="changedTokens">+</span>   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected<span class="changedTokens">/</span>   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+ | Undetected<span class="changedTokens">*</span>   | ${asPercentString(undetectedMutations, _totalRuns)}                        |</span></td></tr></table>
+
+</div></a><a name="389"><span class="lineNumber">     389 </span>''';</a>
+<a name="390"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     390 </span>    _groupStatistics.forEach((k, v) {</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+    <span class="changedTokens"> _groupStatistics.forEach( v) {
+      rv += '| Detected by: $k            | $v         |\n';
+    },(k);</span></span></td></tr></table>
+
+</div></a><a name="391"><button class="collapsible problem"><pre class="fileContents"><span class="lineNumber">     391 </span>      rv += '| Detected by: $k            | $v         |\n';</pre></button>
+<div class="content">
+<b>Undetected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv += '<span class="changedTokens">|!( Detected by: $k            )|</span> $v         |\n';</span></td></tr></table>
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">^</span>= '| Detected by: $k            | $v         |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">%</span>= '| Detected by: $k            | $v         |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">/</span>= '| Detected by: $k            | $v         |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">*</span>= '| Detected by: $k            | $v         |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+       rv <span class="changedTokens">-</span>= '| Detected by: $k            | $v         |\n';</span></td></tr></table>
+
+</div></a><a name="392"><span class="lineNumber">     392 </span>    });</a>
+<a name="393"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     393 </span>    rv += '| Quality Rating | $rating |\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">/</span>= '| Quality Rating | $rating |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">*</span>= '| Quality Rating | $rating |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv += '| Quality Rating | $rating <span class="changedTokens">|!(\n';
+    rv += ')|</span> Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv += '<span class="changedTokens">|!( Quality Rating )|</span> $rating |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">-</span>= '| Quality Rating | $rating |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">^</span>= '| Quality Rating | $rating |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">7 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">%</span>= '| Quality Rating | $rating |\n';</span></td></tr></table>
+
+</div></a><a name="394"><button class="collapsible hit"><pre class="fileContents"><span class="lineNumber">     394 </span>    rv += '| Success | $success |\n';</pre></button>
+<div class="content">
+<b>Detected mutations:</b>
+<table class="mutationTable">
+<tr><td class="mutationLabel" width="10%">1 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">^</span>= '| Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">2 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">%</span>= '| Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">3 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">/</span>= '| Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">4 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">*</span>= '| Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">5 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv <span class="changedTokens">-</span>= '| Success | $success |\n';</span></td></tr><tr><td colspan="2"><hr class="ruler"/></td></tr><tr><td class="mutationLabel" width="10%">6 :</td><td class="mutationText" width="90%"><span class="addedLine">+     rv += '| Success <span class="changedTokens">|!( $success )|</span>\n';</span></td></tr></table>
+
+</div></a><a name="395"><span class="lineNumber">     395 </span>    return '$rv\n\n';</a>
+<a name="396"><span class="lineNumber">     396 </span>  }</a>
+<a name="397"><span class="lineNumber">     397 </span>}</a>
+<a name="398"><span class="lineNumber">     398 </span></a>
+</pre>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+	for (k = 0; k < coll.length; k++) {
+      var content2 = coll[k].nextElementSibling;
+      if (content2.style.maxHeight && content.parentElement == content2){
+      content2.style.maxHeight = content2.scrollHeight + content.scrollHeight + "px";
+    }
+      
+    }
+    
+  });
+}
+</script><table width ="100%" cellspacing="0" border="0">
+  <tr><td><hr class="ruler"/></td></tr>
+  <tr><td class="footer">Generated by <a href="https://domohuhn.github.io/mutation-test/">mutation-test version: 1.3.2</a></td></tr>
+</table>
+</body>
+</html>
