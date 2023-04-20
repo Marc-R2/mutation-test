@@ -9,48 +9,50 @@ import 'package:mutation_test/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Create Toplevel html file', () {
-    final result = createToplevelHtmlFile(ResultsReporter('test.xml', true));
-    // exclude report creation time
+  group('HtmlReporter', () {
+    test('Create Toplevel html file', () {
+      final result = createToplevelHtmlFile(ResultsReporter('test.xml', true));
+      // exclude report creation time
 
-    const end1 = 5494;
-    const start2 = end1 + 24;
+      const end1 = 5494;
+      const start2 = end1 + 24;
 
-    expect(result.substring(0, end1), emptyToplevel.substring(0, end1));
-    expect(result.substring(start2), emptyToplevel.substring(start2));
-  });
+      expect(result.substring(0, end1), emptyToplevel.substring(0, end1));
+      expect(result.substring(start2), emptyToplevel.substring(start2));
+    });
 
-  test('Create html source report', () {
-    final reporter = ResultsReporter('test.xml', true);
-    reporter.startFileTest('path.dart', 3, 'var x = 0;\n\n// mooo\n');
-    reporter.addTestReport(
-      'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = -0;', Mutation('[0-9]+')),
-      TestReport(TestResult.Detected),
-      true,
-    );
-    reporter.addTestReport(
-      'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = a;', Mutation('[0-9]+')),
-      TestReport(TestResult.Undetected),
-      true,
-    );
-    reporter.addTestReport(
-      'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = c;', Mutation('[0-9]+')),
-      TestReport(TestResult.Timeout),
-      true,
-    );
+    test('Create html source report', () {
+      final reporter = ResultsReporter('test.xml', true);
+      reporter.startFileTest('path.dart', 3, 'var x = 0;\n\n// mooo\n');
+      reporter.addTestReport(
+        'path.dart',
+        MutatedLine(1, 0, 5, 'var x = 0;', 'var x = -0;', Mutation('[0-9]+')),
+        TestReport(TestResult.Detected),
+        true,
+      );
+      reporter.addTestReport(
+        'path.dart',
+        MutatedLine(1, 0, 5, 'var x = 0;', 'var x = a;', Mutation('[0-9]+')),
+        TestReport(TestResult.Undetected),
+        true,
+      );
+      reporter.addTestReport(
+        'path.dart',
+        MutatedLine(1, 0, 5, 'var x = 0;', 'var x = c;', Mutation('[0-9]+')),
+        TestReport(TestResult.Timeout),
+        true,
+      );
 
-    final result = createSourceHtmlFile(ResultsReporter('test.xml', true),
-        reporter.testedFiles.values.first, 'test.html');
+      final result = createSourceHtmlFile(ResultsReporter('test.xml', true),
+          reporter.testedFiles.values.first, 'test.html');
 
-    // exclude report creation time
-    const end1 = 5534;
-    const start2 = end1 + 24;
+      // exclude report creation time
+      const end1 = 5534;
+      const start2 = end1 + 24;
 
-    expect(result.substring(0, end1), htmlSourceFileReport.substring(0, end1));
-    expect(result.substring(start2), htmlSourceFileReport.substring(start2));
+      expect(result.substring(0, end1), htmlSourceFileReport.substring(0, end1));
+      expect(result.substring(start2), htmlSourceFileReport.substring(start2));
+    });
   });
 }
 

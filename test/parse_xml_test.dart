@@ -7,115 +7,117 @@ import 'package:mutation_test/src/configuration.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Parse builtin rules', () {
-    final configuration = Configuration(true, true);
-    configuration.parseXMLString(builtinMutationRules());
-    expect(configuration.exclusions.length, 10);
-    expect(configuration.mutations.length, 28);
-    expect(configuration.files.length, 0);
-    expect(configuration.commands.length, 0);
-  });
+  group('ParseXML', (){
+    test('Parse builtin rules', () {
+      final configuration = Configuration(true, true);
+      configuration.parseXMLString(builtinMutationRules());
+      expect(configuration.exclusions.length, 10);
+      expect(configuration.mutations.length, 28);
+      expect(configuration.files.length, 0);
+      expect(configuration.commands.length, 0);
+    });
 
-  test('Parse example string', () {
-    final configuration = Configuration(true, true);
-    configuration.parseXMLString(fullXMLFile());
-    expect(configuration.exclusions.length, 10);
-    expect(configuration.mutations.length, 28);
-    expect(configuration.files.length, 2);
-    expect(configuration.commands.length, 2);
-    configuration.validate();
-  });
+    test('Parse example string', () {
+      final configuration = Configuration(true, true);
+      configuration.parseXMLString(fullXMLFile());
+      expect(configuration.exclusions.length, 10);
+      expect(configuration.mutations.length, 28);
+      expect(configuration.files.length, 2);
+      expect(configuration.commands.length, 2);
+      configuration.validate();
+    });
 
-  test('Parse file exclusion', () {
-    final configuration = Configuration(true, true);
-    configuration.parseXMLString(_excludeFiles);
-    expect(configuration.files.length, 0);
-    expect(configuration.excludedFiles.length, 2);
-    expect(configuration.excludedFiles[0], 'some/file/to/exclude');
-    expect(configuration.excludedFiles[1], 'test/parse_xml_test.dart');
-  });
+    test('Parse file exclusion', () {
+      final configuration = Configuration(true, true);
+      configuration.parseXMLString(_excludeFiles);
+      expect(configuration.files.length, 0);
+      expect(configuration.excludedFiles.length, 2);
+      expect(configuration.excludedFiles[0], 'some/file/to/exclude');
+      expect(configuration.excludedFiles[1], 'test/parse_xml_test.dart');
+    });
 
-  test('Input error - wrong version', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_wrongVersion),
-      throwsException,
-    );
-  });
+    test('Input error - wrong version', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_wrongVersion),
+        throwsException,
+      );
+    });
 
-  test('Input error - lines', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noLineAttributes),
-      throwsException,
-    );
-  });
+    test('Input error - lines', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noLineAttributes),
+        throwsException,
+      );
+    });
 
-  test('Input error - token', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noTokenAttributes),
-      throwsException,
-    );
-  });
+    test('Input error - token', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noTokenAttributes),
+        throwsException,
+      );
+    });
 
-  test('Input error - regex', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noRegexAttributes),
-      throwsException,
-    );
-  });
+    test('Input error - regex', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noRegexAttributes),
+        throwsException,
+      );
+    });
 
-  test('Input error - literal', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noLiteralAttributes),
-      throwsException,
-    );
-  });
+    test('Input error - literal', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noLiteralAttributes),
+        throwsException,
+      );
+    });
 
-  test('Input error - mutation', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noMutationAttributes),
-      throwsException,
-    );
-  });
+    test('Input error - mutation', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noMutationAttributes),
+        throwsException,
+      );
+    });
 
-  test('Input error - no replacement rule', () {
-    final configuration = Configuration(false, true);
-    expect(
-      () => configuration.parseXMLString(_noMutationChild),
-      throwsException,
-    );
-  });
+    test('Input error - no replacement rule', () {
+      final configuration = Configuration(false, true);
+      expect(
+            () => configuration.parseXMLString(_noMutationChild),
+        throwsException,
+      );
+    });
 
-  test('Read from file', () {
-    final configuration =
-        Configuration.fromFile('./example/should_timeout.xml', false, true);
-    expect(configuration.exclusions.length, 0);
-    expect(configuration.mutations.length, 0);
-    expect(configuration.files.length, 1);
-    expect(configuration.commands.length, 1);
-    expect(configuration.validate, throwsException);
-  });
+    test('Read from file', () {
+      final configuration =
+      Configuration.fromFile('./example/should_timeout.xml', false, true);
+      expect(configuration.exclusions.length, 0);
+      expect(configuration.mutations.length, 0);
+      expect(configuration.files.length, 1);
+      expect(configuration.commands.length, 1);
+      expect(configuration.validate, throwsException);
+    });
 
-  test('Dart default rules', () {
-    final xml = dartDefaultConfiguration();
-    expect(
-        xml,
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<mutations version="1.0">\n'
-        '  <directories>\n'
-        '    <directory recursive="true">lib\n'
-        '      <matching pattern="\\.dart\$"/>\n'
-        '    </directory>\n'
-        '  </directories>\n'
-        '  <commands>\n'
-        '    <command group="test" expected-return="0" working-directory="." timeout="60">dart test</command>\n'
-        '  </commands>\n'
-        '</mutations>\n');
+    test('Dart default rules', () {
+      final xml = dartDefaultConfiguration();
+      expect(
+          xml,
+          '<?xml version="1.0" encoding="UTF-8"?>\n'
+              '<mutations version="1.0">\n'
+              '  <directories>\n'
+              '    <directory recursive="true">lib\n'
+              '      <matching pattern="\\.dart\$"/>\n'
+              '    </directory>\n'
+              '  </directories>\n'
+              '  <commands>\n'
+              '    <command group="test" expected-return="0" working-directory="." timeout="60">dart test</command>\n'
+              '  </commands>\n'
+              '</mutations>\n');
+    });
   });
 }
 
