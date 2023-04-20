@@ -16,19 +16,19 @@ void main() {
     reporter.startFileTest('path.dart', 3, 'var x = 0;\n\n// mooo\n');
     reporter.addTestReport(
       'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = -0;'),
+      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = -0;', Mutation('0')),
       TestReport(TestResult.Detected),
       true,
     );
     reporter.addTestReport(
       'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = a;'),
+      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = a;', Mutation('0')),
       TestReport(TestResult.Undetected),
       true,
     );
     reporter.addTestReport(
       'path.dart',
-      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = c;'),
+      MutatedLine(1, 0, 5, 'var x = 0;', 'var x = c;', Mutation('0')),
       TestReport(TestResult.Timeout),
       true,
     );
@@ -58,26 +58,29 @@ void main() {
       // exclude execution time
       expect(xml.substring(0, 137), xmlReportString.substring(0, 137));
       expect(
-          xml.substring(149),
-          '</elapsed>\n'
-          '<result rating="N/A" success="false"/>\n'
-          '<rules>\n'
-          '<ruleset document="test.xml"/></rules>\n'
-          '<file name="path.dart">\n'
-          '<mutation line="1">\n'
-          '<original>var x = 0;</original>\n'
-          '<modified>var x = a;</modified>\n'
-          '</mutation>\n'
-          '</file>\n'
-          '</undetected-mutations>\n');
+        xml.substring(149),
+        '</elapsed>\n'
+        '<result rating="N/A" success="false"/>\n'
+        '<rules>\n'
+        '<ruleset document="test.xml"/></rules>\n'
+        '<file name="path.dart">\n'
+        '<mutation line="1">\n'
+        '<original>var x = 0;</original>\n'
+        '<modified>var x = a;</modified>\n'
+        '</mutation>\n'
+        '</file>\n'
+        '</undetected-mutations>\n',
+      );
     });
 
     test('md report', () {
       final md = reporter.createMarkdownReport();
+
       const end1 = 86;
       const start2 = 113;
       const end2 = 307;
       const start3 = 321;
+
       // exclude execution time
       expect(md.substring(0, end1), mdString.substring(0, end1));
       expect(
@@ -141,10 +144,12 @@ void main() {
 
     test('md report', () {
       final md = reporter.createMarkdownReport();
+
       const end1 = 86;
       const start2 = 113;
       const end2 = 307;
       const start3 = 321;
+
       // exclude execution time
       expect(md.substring(0, end1), mdString.substring(0, end1));
       expect(md.substring(start2, end2), mdString.substring(start2, end2));

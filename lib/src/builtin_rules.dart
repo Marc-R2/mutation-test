@@ -59,37 +59,45 @@ String _xmlInputs() {
 /// A XML snippet for a rules file.
 String _xmlRules() {
   return r'''
-   <!-- The rules element describes all mutations done during a mutation test -->
-   <!-- The following children are parsed: literal and regex -->
-   <!-- A literal element matches the literal text -->
-   <!-- A regex element mutates source code if the regular expression matches -->
-   <!-- Each of them must have at least one mutation child -->
-   <rules>
+  <!-- The rules element describes all mutations done during a mutation test -->
+  <!-- The following children are parsed: literal and regex -->
+  <!-- A literal element matches the literal text -->
+  <!-- A regex element mutates source code if the regular expression matches -->
+  <!-- Each of them must have at least one mutation child -->
+  <rules>
     <!-- A literal element matches the literal text and replaces it with the list of mutations  -->
+    <!-- Replaces 'and' and 'or'  with each other -->
     <literal text="&amp;&amp;">
       <mutation text="||"/>
     </literal>
     <literal text="||">
       <mutation text="&amp;&amp;"/>
     </literal>
-    <literal text="+">
-      <mutation text="-"/>
-      <mutation text="*"/>
+    <!-- Replaces assignments with other assignments -->
+    <literal text="+=">
+      <mutation text="="/>
     </literal>
-    <literal text="-">
-      <mutation text="+"/>
-      <mutation text="*"/>
+    <literal text="-=">
+      <mutation text="="/>
     </literal>
-    <literal text="*">
-      <mutation text="+"/>
-      <mutation text="-"/>
+    <literal text="*=">
+      <mutation text="="/>
     </literal>
-    <literal text="/">
-      <mutation text="*"/>
-      <mutation text="+"/>
+    <literal text="/=">
+      <mutation text="="/>
     </literal>
+    <literal text="&=">
+      <mutation text="="/>
+    </literal>
+    <literal text="^=">
+      <mutation text="="/>
+    </literal>
+    <!-- Replaces comparison operators -->
     <literal text="==">
       <mutation text="!="/>
+    </literal>
+    <literal text="!=">
+      <mutation text="=="/>
     </literal>
     <literal text="&lt;=">
       <mutation text="=="/>
@@ -98,9 +106,6 @@ String _xmlRules() {
     <literal text="&gt;=">
       <mutation text="=="/>
       <mutation text="&gt;"/>
-    </literal>
-    <literal text="!=">
-      <mutation text="=="/>
     </literal>
     <!-- It is also possible to match a regular expression with capture groups. -->
     <!-- If the optional attribute dotAll is set to true, then the . will also match newlines.  -->
@@ -144,20 +149,34 @@ String _xmlRules() {
     <regex pattern="([\s=\(])([1-9\.]+[0-9]+|0\.0*[1-9])">
       <mutation text="$1-$2"/>
     </regex>
+    <!-- checks if neighboring arguments may have been mixed up -->
     <!-- switch function call arguments. Matches 2 args -->
-    <regex pattern="([\s][a-zA-z]*?[^\(;\s]*?)\s*\(([^,]*),([^,]*)\)\s*;">
+    <regex pattern="([\s][a-zA-Z]+?[^(;\s{}]*?)\s*\(([^,;{}(]+?),([^,;{}(]+?)\)\s*;">
       <mutation text="$1($3,$2);"/>
     </regex>
     <!-- switch function call arguments. Matches 3 args -->
-    <regex pattern="([\s][a-zA-z]*?[^\(;\s{}]*?)\s*\(([^,\n\(]*),([^,\n\(]*),([^,\n\(]*)\)\s*;">
+    <regex pattern="([\s][a-zA-Z]+?[^\(;\s{}]*?)\s*\(([^,;{}(]+?),([^,;{}(]+?),([^,;{}(]+?)\)\s*;">
       <mutation text="$1($3,$2,$4);"/>
       <mutation text="$1($2,$4,$3);"/>
     </regex>
     <!-- switch function call arguments. Matches 4 args -->
-    <regex pattern="([\s][a-zA-z]*?[^\(;\s{}]*?)\s*\(([^,\n\(]*),([^,\n\(]*),([^,\n\(]*),([^,\n\(]*)\)\s*;">
+    <regex pattern="([\s][a-zA-Z]+?[^\(;\s{}]*?)\s*\(([^,;{}(]+?),([^,;{}(]+?),([^,;{}(]+?),([^,;{}(]+?)\)\s*;">
       <mutation text="$1($3,$2,$4,$5);"/>
       <mutation text="$1($2,$4,$3,$5);"/>
       <mutation text="$1($2,$3,$5,$4);"/>
+    </regex>
+    <!-- Replaces arithmetic operators with their opposite -->
+    <regex pattern="\+([^=])">
+      <mutation text="-$1"/>
+    </regex>
+    <regex pattern="-([^=])">
+      <mutation text="+$1"/>
+    </regex>
+    <regex pattern="\*([^=])">
+      <mutation text="/$1"/>
+    </regex>
+    <regex pattern="/([^=])">
+      <mutation text="*$1"/>
     </regex>
   </rules>
   <!-- This element creates a blacklist, allowing you to exclude parts from the mutations -->
@@ -176,12 +195,14 @@ String _xmlRules() {
     <!-- exclude increment and decrement operators. Produces mostly false positives.  -->
     <regex pattern="\+\+"/>
     <regex pattern="--"/>
-    <!-- exclude loops to prevent infinte tests -->
+    <!-- excludes loops from mutations to prevent tests to run forever -->
     <regex pattern="[\s]for[\s]*\(.*?\)[\s]*{" dotAll="true"/>
     <regex pattern="[\s]while[\s]*\(.*?\)[\s]*{.*?}" dotAll="true"/>
     <!-- lines can also be globally excluded  -->
     <!-- line index starts at 1  -->
     <!-- lines begin="1" end="2"/-->
+    <!-- It is possible to exclude files using the file element. -->
+    <!-- <file>path/to/exclude.dart</file> -->
   </exclude>
   <!-- Configures the reporting thresholds as percentage of detected mutations -->
   <!-- Attribute failure is required and must be a floating point number. -->
@@ -189,7 +210,7 @@ String _xmlRules() {
   <!-- If no threshold element is found, these values will be used. -->
   <threshold failure="80">
     <!-- Provides reliability rating levels. Attributes are required. -->
-    <rating over="100" name="A"/>
+    <rating over="95" name="A"/>
     <rating over="80" name="B"/>
     <rating over="60" name="C"/>
     <rating over="40" name="D"/>

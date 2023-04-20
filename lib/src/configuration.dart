@@ -24,6 +24,7 @@ class TargetFile {
 class Configuration {
   Configuration(this.verbose, this.dry)
       : files = [],
+        excludedFiles = [],
         mutations = [],
         commands = [],
         exclusions = [],
@@ -32,6 +33,7 @@ class Configuration {
   /// Constructs the configuration from an xml file in [path]
   Configuration.fromFile(String path, this.verbose, this.dry)
       : files = [],
+        excludedFiles = [],
         mutations = [],
         commands = [],
         exclusions = [],
@@ -39,9 +41,19 @@ class Configuration {
     addRulesFromFile(path);
   }
 
+  /// The list of source files that will be mutated
   List<TargetFile> files;
+
+  /// The list files that are excluded
+  List<String> excludedFiles;
+
+  /// The mutation rules added from the rules
   List<Mutation> mutations;
+
+  /// The commands to execute to detect mutations
   List<Command> commands;
+
+  /// Lists the excluded sections in files
   List<Range> exclusions;
   Ratings ratings;
   bool toplevelFound = false;
@@ -56,6 +68,22 @@ class Configuration {
     parseXMLString(contents);
   }
 
+  /// Removes all input source files from the target file list
+  /// that were explicitly excluded in the rules file.
+  void _removeExcludedSourceFiles() {
+    for (final excluded in excludedFiles) {
+      files.removeWhere((element) {
+        if (element.path == excluded) {
+          if (verbose) {
+            print('Excluding file: $excluded');
+          }
+          return true;
+        }
+        return false;
+      });
+    }
+  }
+
   /// Parses an XML string with the given [contents]
   void parseXMLString(String contents) {
     final document = xml.XmlDocument.parse(contents);
@@ -65,6 +93,7 @@ class Configuration {
     if (!toplevelFound) {
       throw MutationError('Could not find xml element <mutations>');
     }
+    _removeExcludedSourceFiles();
   }
 
   /// Checks if the configuration is valid.
@@ -120,6 +149,7 @@ class Configuration {
       _processXMLNode(el, 'regex', (el) {
         exclusions.add(RegexRange(_parseRegEx(el)));
       });
+      _processXMLNode(el, 'file', _addExcludedFile);
     });
     if (verbose) {
       print(' ${exclusions.length} exclusion rules');
@@ -157,6 +187,11 @@ class Configuration {
       whitelist.add(_parseLineRange(el));
     });
     files.add(TargetFile(path, whitelist));
+  }
+
+  void _addExcludedFile(xml.XmlElement element) {
+    final path = element.text.trim();
+    excludedFiles.add(path);
   }
 
   void _addDirectory(xml.XmlElement element) {
@@ -254,8 +289,10 @@ class Configuration {
     if (pattern == null) {
       throw MutationError('Every <regex> needs a pattern!');
     }
+
     final tmp = element.getAttribute('dotAll');
     final dotMatchesNewlines = tmp != null && tmp == 'true';
+
     return RegExp(pattern, multiLine: true, dotAll: dotMatchesNewlines);
   }
 

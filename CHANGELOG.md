@@ -1,6 +1,14 @@
+## 1.3.4
+ - Improved mutation rules that switch function arguments
+ - Updated dependencies
+
+## 1.3.3
+ - Improve builtin rules with operators like "+=". There should be less useless mutations that are always detected now.
+ - The \<exclude\> element in xml rule definitions now supports the exclusion of files by listing them as \<file\> element.
+
 ## 1.3.2
  - Added builtin rules to swap arguments on function calls.
- - Added a dark theme (prefers-color-scheme: dark) in the html reports.
+ - Added a dark theme (prefers-color-scheme: dark) for html reports.
 
 ## 1.3.1
  - Fixed bugs when creating reports.

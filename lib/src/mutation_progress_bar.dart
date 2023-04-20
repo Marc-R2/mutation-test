@@ -32,7 +32,7 @@ class MutationProgressBar {
   /// [count] is also used to compute the percentage of progress.
   void startFile(String path, int count) {
     if (!_timer.isRunning) _timer.start();
-    if (!quiet) print('$path : performing $count mutations'.padRight(_width));
+    if (!quiet) print('$path : $count mutations'.padRight(_width));
     file.current = 0;
     file.maximum = count;
   }
@@ -41,9 +41,9 @@ class MutationProgressBar {
   void endFile(int failed) {
     final pct = 1.0 - failed.toDouble() / file.maximum.toDouble();
     final prefix = 100 * pct <= threshold ? 'FAILED' : 'OK';
-    final text =
-        '$prefix: $failed/${file.maximum} (${asPercentString(failed, file.maximum)}) mutations passed all tests!'
-            .padRight(_width);
+    final text = '$prefix: $failed/${file.maximum} '
+        '(${asPercentString(failed, file.maximum)}) '
+        'mutations were not detected!'.padRight(_width);
     _writeText(text, true);
   }
 

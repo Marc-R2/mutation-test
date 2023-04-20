@@ -168,6 +168,7 @@ class MutationTest {
   /// Count all mutations done in all input files
   Future<void> _countAll() async {
     var totalCount = 0;
+    var fileCount = 0;
     for (final file in inputs) {
       final data = _createMutationData(
         file,
@@ -185,6 +186,7 @@ class MutationTest {
 
         final count = await countMutations(data);
         totalCount += count;
+        fileCount += 1;
       }
     }
     if (inputs.isEmpty) {
@@ -205,11 +207,10 @@ class MutationTest {
 
         final count = await countMutations(data);
         totalCount += count;
+        fileCount += 1;
       }
     }
-    if (verbose) {
-      print('Performing $totalCount mutations!');
-    }
+    print('Found $totalCount mutations in $fileCount source files!');
     bar.mutationCount = totalCount;
   }
 

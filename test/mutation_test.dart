@@ -123,11 +123,12 @@ Line 3:<br>
 
   group('mutated line', () {
     test('mutation on linebreak', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         4,
         8,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       expect(mut.start, 0);
       expect(
@@ -145,11 +146,12 @@ Line 3:<br>
     });
 
     test('range inverted', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         8,
         4,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       try {
         var str = 'a${mut.toHTML()}';
@@ -163,11 +165,12 @@ Line 3:<br>
     });
 
     test('out of range 1', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         -10,
         -5,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       try {
         var str = 'a${mut.toHTML()}';
@@ -181,11 +184,12 @@ Line 3:<br>
     });
 
     test('out of range 2', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         -10,
         4,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       try {
         var str = 'a${mut.toHTML()}';
@@ -199,11 +203,12 @@ Line 3:<br>
     });
 
     test('out of range 3', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         4,
         500,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       try {
         var str = 'a${mut.toHTML()}';
@@ -217,11 +222,12 @@ Line 3:<br>
     });
 
     test('out of range 4', () {
-      final mut = createMutatedLine(
+      var mut = createMutatedLine(
         400,
         500,
         'smoe\n.collapsible {\nsdfsfsf\n',
         'smoe\n-.collapsible {\nsdfsfsf\n',
+        Mutation('.'),
       );
       try {
         var str = 'a${mut.toHTML()}';
