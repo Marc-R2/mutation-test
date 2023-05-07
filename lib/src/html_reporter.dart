@@ -60,7 +60,7 @@ String _createMutationReportList(
   String title,
 ) {
   final rv = StringBuffer('<b>$title</b>\n<table class="mutationTable">\n');
-  int i = 1;
+  var i = 1;
   for (final mut in mutations) {
     if (line == mut.line) {
       if (i > 1) rv.write('<tr><td colspan="3"><hr class="ruler"/></td></tr>');

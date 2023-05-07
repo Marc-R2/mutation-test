@@ -78,8 +78,7 @@ class MutationProgressBar {
     if (verbose) {
       print(text);
     } else {
-      if (newline) text += '\n';
-      stdout.write('\r$text');
+      stdout.write('\r$text${newline ? '\n' : ''}}');
     }
   }
 }

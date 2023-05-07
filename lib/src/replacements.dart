@@ -166,7 +166,7 @@ class RegexReplacement extends Replacement {
     } catch (e) {
       throw MutationError(
         'RegEx mutation "$_text" requires groups! '
-        'Pattern only has ${match.groupCount} groups!  ${e.toString()}',
+        'Pattern only has ${match.groupCount} groups! $e',
       );
     }
     return text.substring(0, match.start) + tmp + text.substring(match.end);

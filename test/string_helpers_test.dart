@@ -78,10 +78,14 @@ void main() {
       expect(createParentLinkPrefix('somefile.cpp'), './');
       expect(createParentLinkPrefix('path/somefile.cpp'), '../');
       expect(
-          createParentLinkPrefix('more/dirs/path/somefile.cpp'), '../../../');
+        createParentLinkPrefix('more/dirs/path/somefile.cpp'),
+        '../../../',
+      );
       expect(createParentLinkPrefix(r'path\somefile.cpp'), '../');
       expect(
-          createParentLinkPrefix(r'more\dirs\path\somefile.cpp'), '../../../');
+        createParentLinkPrefix(r'more\dirs\path\somefile.cpp'),
+        '../../../',
+      );
     });
 
     test('report file name 2', () {

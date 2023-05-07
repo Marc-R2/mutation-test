@@ -7,7 +7,7 @@ void main() {
     test('Switch 2 function arguments 1', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 double testfunc(double x) {
   double y = other(x);
   return add(x,y);
@@ -26,7 +26,7 @@ double testfunc(double x) {
     test('Switch 2 function arguments 2', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 // somestuff
 
 super(name, false) {
@@ -45,7 +45,7 @@ super(name, false) {
     test('Switch 3 function arguments', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 double testfunc(double x) {
   double y = other(x);
   return add(x,y,x);
@@ -62,7 +62,7 @@ double testfunc(double x) {
     test('Switch 3 function arguments 2', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 // somestuff
 
 super(name, false) {
@@ -80,7 +80,7 @@ super(name, false) {
     test('Switch 4 function arguments', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 double testfunc(double x) {
   double y = other(x);
   return add(x,y,z,a);
@@ -97,7 +97,7 @@ double testfunc(double x) {
     test('Switch 4 function arguments 2', () {
       final configuration = Configuration(false, true);
       configuration.parseXMLString(builtinMutationRules());
-      final testSource = '''
+      const testSource = '''
 // somestuff
 
 super(name, false) {

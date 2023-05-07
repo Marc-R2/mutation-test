@@ -43,15 +43,20 @@ void main() {
         true,
       );
 
-      final result = createSourceHtmlFile(ResultsReporter('test.xml', true),
-          reporter.testedFiles.values.first, 'test.html');
+      final result = createSourceHtmlFile(
+        ResultsReporter('test.xml', true),
+        reporter.testedFiles.values.first,
+        'test.html',
+      );
 
       // exclude report creation time
       const end1 = 5534;
       const start2 = end1 + 24;
 
       expect(
-          result.substring(0, end1), htmlSourceFileReport.substring(0, end1));
+        result.substring(0, end1),
+        htmlSourceFileReport.substring(0, end1),
+      );
       expect(result.substring(start2), htmlSourceFileReport.substring(start2));
     });
   });

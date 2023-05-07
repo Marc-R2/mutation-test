@@ -125,7 +125,7 @@ Line 3:<br>
 
     group('mutated line', () {
       test('mutation on linebreak', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           4,
           8,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -148,7 +148,7 @@ Line 3:<br>
       });
 
       test('range inverted', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           8,
           4,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -167,7 +167,7 @@ Line 3:<br>
       });
 
       test('out of range 1', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           -10,
           -5,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -186,7 +186,7 @@ Line 3:<br>
       });
 
       test('out of range 2', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           -10,
           4,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -205,7 +205,7 @@ Line 3:<br>
       });
 
       test('out of range 3', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           4,
           500,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -224,7 +224,7 @@ Line 3:<br>
       });
 
       test('out of range 4', () {
-        var mut = createMutatedLine(
+        final mut = createMutatedLine(
           400,
           500,
           'smoe\n.collapsible {\nsdfsfsf\n',
