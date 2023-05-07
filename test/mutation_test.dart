@@ -2,13 +2,14 @@
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
 
-import 'package:mutation_test/src/mutations.dart';
+import 'package:mutation_test/mutation_test.dart';
+import 'package:mutation_test/src/mutations/mutation_iterator.dart';
 import 'package:mutation_test/src/range.dart';
 import 'package:mutation_test/src/replacements.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('mutation test', () {
+  group('mutations test', () {
     final mut = Mutation('aaa');
     mut.replacements.addAll([
       LiteralReplacement('bbb'),

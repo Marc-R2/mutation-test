@@ -2,7 +2,7 @@
 /// License: BSD-3-Clause
 /// See LICENSE for the full text of the license
 
-import 'package:mutation_test/src/mutations.dart';
+import 'package:mutation_test/src/mutations/mutation.dart';
 import 'package:mutation_test/src/report_format.dart';
 import 'package:mutation_test/src/string_helpers.dart';
 import 'package:mutation_test/src/version.dart';

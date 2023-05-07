@@ -7,7 +7,7 @@ import 'dart:io';
 import 'package:mutation_test/src/commands.dart';
 import 'package:mutation_test/src/errors.dart';
 import 'package:mutation_test/src/html_reporter.dart';
-import 'package:mutation_test/src/mutations.dart';
+import 'package:mutation_test/src/mutations/mutation.dart';
 import 'package:mutation_test/src/ratings.dart';
 import 'package:mutation_test/src/string_helpers.dart';
 import 'package:mutation_test/src/version.dart';
