@@ -31,8 +31,11 @@ class Configuration {
         ratings = Ratings();
 
   /// Constructs the configuration from an xml file in [path]
-  Configuration.fromFile(String path, this.verbose, this.dry)
-      : files = [],
+  Configuration.fromFile({
+    required String path,
+    required this.verbose,
+    required this.dry,
+  })  : files = [],
         excludedFiles = [],
         mutations = [],
         commands = [],
@@ -42,27 +45,34 @@ class Configuration {
   }
 
   /// The list of source files that will be mutated
-  List<TargetFile> files;
+  final List<TargetFile> files;
 
   /// The list files that are excluded
-  List<String> excludedFiles;
+  final List<String> excludedFiles;
 
   /// The mutation rules added from the rules
-  List<Mutation> mutations;
+  final List<Mutation> mutations;
 
   /// The commands to execute to detect mutations
-  List<Command> commands;
+  final List<Command> commands;
 
   /// Lists the excluded sections in files
-  List<Range> exclusions;
-  Ratings ratings;
+  final List<Range> exclusions;
+
+  /// The ratings for the mutation-test
+  final Ratings ratings;
+
+  /// Verbose output
+  final bool verbose;
+
+  /// Dry run only. Do not mutate files.
+  final bool dry;
+
   bool toplevelFound = false;
-  bool verbose;
-  bool dry;
 
   /// Add all rules from [path]
   void addRulesFromFile(String path) {
-    if (verbose) print('Processing $path');
+    verbosePrint('Processing $path');
     final file = File(path);
     final contents = file.readAsStringSync();
     parseXMLString(contents);
@@ -73,13 +83,9 @@ class Configuration {
   void _removeExcludedSourceFiles() {
     for (final excluded in excludedFiles) {
       files.removeWhere((element) {
-        if (element.path == excluded) {
-          if (verbose) {
-            print('Excluding file: $excluded');
-          }
-          return true;
-        }
-        return false;
+        if (element.path != excluded) return false;
+        verbosePrint('Excluding file: $excluded');
+        return true;
       });
     }
   }
@@ -88,7 +94,7 @@ class Configuration {
   void parseXMLString(String contents) {
     final document = xml.XmlDocument.parse(contents);
     for (final element in document.findAllElements('mutations')) {
-      _processTopLevel(element);
+      processTopLevel(element);
     }
     if (!toplevelFound) {
       throw MutationError('Could not find xml element <mutations>');
@@ -102,13 +108,40 @@ class Configuration {
   void validate() {
     if ((files.isEmpty) || mutations.isEmpty || commands.isEmpty) {
       throw MutationError(
-          'At least one entry in the configuration for each of the following elements is needed:\n'
-          'files: ${files.length} mutation rules: ${mutations.length} verification commands: ${commands.length}');
+        'At least one entry in the configuration for '
+        'each of the following elements is needed:\n'
+        'files: ${files.length} mutation rules: ${mutations.length} '
+        'verification commands: ${commands.length}',
+      );
     }
     ratings.sanitize();
   }
 
-  void _processTopLevel(xml.XmlElement root) {
+  /// Reads the configuration from an xml element.
+  void processTopLevel(xml.XmlElement root) {
+    processVersion(root);
+
+    processFiles(root);
+
+    processRules(root);
+
+    processExclude(root);
+
+    processCommands(root);
+
+    processThreshold(root);
+  }
+
+  /// Prints a verbose message if [verbose] is true.
+  void verbosePrint(String str) {
+    if (verbose) print(str);
+  }
+
+  /// Check the version of the configuration file.
+  ///
+  /// Throws a [MutationError] if the version is not supported or
+  /// the version attribute is missing.
+  void processVersion(xml.XmlElement root) {
     final str = root.getAttribute('version');
     toplevelFound = true;
     if (str == null) {
@@ -119,10 +152,11 @@ class Configuration {
     if (double.parse(str) != 1.0) {
       throw MutationError('Configuration file version not supported!');
     }
-    if (verbose) {
-      print('- configuration file version $str');
-    }
+    verbosePrint('- configuration file version $str');
+  }
 
+  /// Reads all files and directories from the configuration file.
+  void processFiles(xml.XmlElement root) {
     _processXMLNode(root, 'files', (xml.XmlElement el) {
       _processXMLNode(el, 'file', _addFile);
     });
@@ -131,18 +165,20 @@ class Configuration {
       _processXMLNode(el, 'directory', _addDirectory);
     });
 
-    if (verbose) {
-      print(' ${files.length} input files');
-    }
+    verbosePrint(' ${files.length} input files');
+  }
 
+  /// Reads the rules from the configuration file.
+  void processRules(xml.XmlElement root) {
     _processXMLNode(root, 'rules', (xml.XmlElement el) {
       _processXMLNode(el, 'literal', _addLiteralRule);
       _processXMLNode(el, 'regex', _addRegexRule);
     });
-    if (verbose) {
-      print(' ${mutations.length} mutation rules');
-    }
+    verbosePrint(' ${mutations.length} mutation rules');
+  }
 
+  /// Reads the exclude rules from the configuration file.
+  void processExclude(xml.XmlElement root) {
     _processXMLNode(root, 'exclude', (xml.XmlElement el) {
       _processXMLNode(el, 'token', _addTokenRange);
       _processXMLNode(el, 'lines', _addLineRange);
@@ -151,22 +187,25 @@ class Configuration {
       });
       _processXMLNode(el, 'file', _addExcludedFile);
     });
-    if (verbose) {
-      print(' ${exclusions.length} exclusion rules');
-    }
+    verbosePrint(' ${exclusions.length} exclusion rules');
+  }
 
+  /// Reads the commands from the configuration file.
+  void processCommands(xml.XmlElement root) {
     _processXMLNode(root, 'commands', (xml.XmlElement el) {
       _processXMLNode(el, 'command', _addCommand);
     });
-    if (verbose) {
-      print(
-        ' ${commands.length} commands will be executed to detect mutations',
-      );
-    }
+    verbosePrint(
+      ' ${commands.length} commands will be executed to detect mutations',
+    );
+  }
 
+  /// Reads the threshold from the configuration file.
+  void processThreshold(xml.XmlElement root) {
     _processXMLNode(root, 'threshold', _parseThreshold);
   }
 
+  /// Applies the given [functor] to all elements of type [type] in [root].
   void _processXMLNode(
     xml.XmlElement root,
     String type,
