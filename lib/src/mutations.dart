@@ -101,70 +101,65 @@ class MutationIterator implements Iterator<MutatedCode> {
     _index += 1;
     return true;
   }
-}
 
-/// Checks if a [position] in [text] is inside the whitelists or if it is excluded.
-bool isPositionOk(
-  List<Range> whitelist,
-  List<Range> exclusions,
-  String text,
-  Match position,
-) {
-  final whitelisted = whitelist.isEmpty ||
-      (isInRange(whitelist, text, position.start) &&
-          isInRange(whitelist, text, position.end));
-  final blacklisted = isInRange(exclusions, text, position.start) ||
-      isInRange(exclusions, text, position.end);
-  return whitelisted && !blacklisted;
-}
-
-/// Checks if a [position] in [text] is inside one of the ranges defined by [ranges].
-bool isInRange(List<Range> ranges, String text, int position) {
-  for (final ex in ranges) {
-    if (ex.isInRange(text, position)) {
-      return true;
-    }
+  /// Checks if a [position] in [text] is inside the whitelists or if it is excluded.
+  static bool isPositionOk(
+      List<Range> whitelist,
+      List<Range> exclusions,
+      String text,
+      Match position,
+      ) {
+    final whitelisted = whitelist.isEmpty ||
+        (isInRange(whitelist, text, position.start) &&
+            isInRange(whitelist, text, position.end));
+    final blacklisted = isInRange(exclusions, text, position.start) ||
+        isInRange(exclusions, text, position.end);
+    return whitelisted && !blacklisted;
   }
-  return false;
-}
 
-/// Adds a mutation to the Testrunner.
-MutatedLine createMutatedLine(
-  int absoluteStart,
-  int absoluteEnd,
-  String original,
-  String mutated,
-  Mutation mutation,
-) {
-  if (absoluteStart < 0) absoluteStart = 0;
-  if (absoluteStart > original.length) absoluteStart = original.length;
-  if (absoluteStart > absoluteEnd) absoluteEnd = absoluteStart;
-  if (absoluteEnd > original.length) absoluteEnd = original.length;
+  /// Checks if a [position] in [text] is inside
+  /// one of the ranges defined by [ranges].
+  static bool isInRange(List<Range> ranges, String text, int position) =>
+      ranges.any((ex) => ex.isInRange(text, position));
 
-  var line = findLineFromPosition(original, absoluteStart);
-  final lineStart = findBeginOfLineFromPosition(original, absoluteStart);
-  final lineEnd = findEndOfLineFromPosition(original, absoluteEnd);
+  /// Adds a mutation to the Testrunner.
+  static MutatedLine createMutatedLine(
+      int absoluteStart,
+      int absoluteEnd,
+      String original,
+      String mutated,
+      Mutation mutation,
+      ) {
+    if (absoluteStart < 0) absoluteStart = 0;
+    if (absoluteStart > original.length) absoluteStart = original.length;
+    if (absoluteStart > absoluteEnd) absoluteEnd = absoluteStart;
+    if (absoluteEnd > original.length) absoluteEnd = original.length;
 
-  // this may be false if the mutation matches the newline character and starts there.
-  final mutationStart =
-      lineStart <= absoluteStart ? absoluteStart - lineStart : 0;
+    var line = findLineFromPosition(original, absoluteStart);
+    final lineStart = findBeginOfLineFromPosition(original, absoluteStart);
+    final lineEnd = findEndOfLineFromPosition(original, absoluteEnd);
 
-  // if the mutation begin is on the newline character,
-  // we want to add one to the line number
-  if (absoluteStart + 1 == lineStart) line += 1;
+    // this may be false if the mutation matches the newline character and starts there.
+    final mutationStart =
+    lineStart <= absoluteStart ? absoluteStart - lineStart : 0;
 
-  final mutationEnd = absoluteEnd - lineStart;
-  final lineEndMutated =
-      findEndOfLineFromPosition(mutated, lineStart + mutationEnd);
+    // if the mutation begin is on the newline character,
+    // we want to add one to the line number
+    if (absoluteStart + 1 == lineStart) line += 1;
 
-  return MutatedLine(
-    line,
-    mutationStart,
-    mutationEnd,
-    original.substring(lineStart, lineEnd),
-    mutated.substring(lineStart, lineEndMutated),
-    mutation,
-  );
+    final mutationEnd = absoluteEnd - lineStart;
+    final lineEndMutated =
+    findEndOfLineFromPosition(mutated, lineStart + mutationEnd);
+
+    return MutatedLine(
+      line,
+      mutationStart,
+      mutationEnd,
+      original.substring(lineStart, lineEnd),
+      mutated.substring(lineStart, lineEndMutated),
+      mutation,
+    );
+  }
 }
 
 /// A mutation data structure with Information about a mutated line.

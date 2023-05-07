@@ -125,7 +125,7 @@ Line 3:<br>
 
     group('mutated line', () {
       test('mutation on linebreak', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           4,
           8,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -148,7 +148,7 @@ Line 3:<br>
       });
 
       test('range inverted', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           8,
           4,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -167,7 +167,7 @@ Line 3:<br>
       });
 
       test('out of range 1', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           -10,
           -5,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -186,7 +186,7 @@ Line 3:<br>
       });
 
       test('out of range 2', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           -10,
           4,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -205,7 +205,7 @@ Line 3:<br>
       });
 
       test('out of range 3', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           4,
           500,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -224,7 +224,7 @@ Line 3:<br>
       });
 
       test('out of range 4', () {
-        final mut = createMutatedLine(
+        final mut = MutationIterator.createMutatedLine(
           400,
           500,
           'smoe\n.collapsible {\nsdfsfsf\n',
@@ -238,7 +238,7 @@ Line 3:<br>
           str += mut.formatMutatedCodeToHTML();
           expect(str.isNotEmpty, true);
         } catch (e) {
-          fail('This code should not thrwo an exception!\nGot: $e');
+          fail('This code should not throw an exception!\nGot: $e');
         }
       });
     });
