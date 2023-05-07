@@ -50,7 +50,8 @@ void main() {
       const end1 = 5534;
       const start2 = end1 + 24;
 
-      expect(result.substring(0, end1), htmlSourceFileReport.substring(0, end1));
+      expect(
+          result.substring(0, end1), htmlSourceFileReport.substring(0, end1));
       expect(result.substring(start2), htmlSourceFileReport.substring(start2));
     });
   });

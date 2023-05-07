@@ -61,16 +61,16 @@ void main() {
         expect(
           xml.substring(149),
           '</elapsed>\n'
-              '<result rating="N/A" success="false"/>\n'
-              '<rules>\n'
-              '<ruleset document="test.xml"/></rules>\n'
-              '<file name="path.dart">\n'
-              '<mutation line="1">\n'
-              '<original>var x = 0;</original>\n'
-              '<modified>var x = a;</modified>\n'
-              '</mutation>\n'
-              '</file>\n'
-              '</undetected-mutations>\n',
+          '<result rating="N/A" success="false"/>\n'
+          '<rules>\n'
+          '<ruleset document="test.xml"/></rules>\n'
+          '<file name="path.dart">\n'
+          '<mutation line="1">\n'
+          '<original>var x = 0;</original>\n'
+          '<modified>var x = a;</modified>\n'
+          '</mutation>\n'
+          '</file>\n'
+          '</undetected-mutations>\n',
         );
       });
 
@@ -87,28 +87,28 @@ void main() {
         expect(
             md.substring(start2, end2),
             '\n'
-                '\n'
-                '| Key           | Value                     |\n'
-                '| ------------- | ------------------------- |\n'
-                '| Rules         | test.xml           |\n'
-                '| Mutations     | 3                        |\n'
-                '| Elapsed     | ');
+            '\n'
+            '| Key           | Value                     |\n'
+            '| ------------- | ------------------------- |\n'
+            '| Rules         | test.xml           |\n'
+            '| Mutations     | 3                        |\n'
+            '| Elapsed     | ');
         expect(
             md.substring(start3),
             '                        |\n'
-                '| Timeouts      | 1                        |\n'
-                '| Undetected    | 2                        |\n'
-                '| Undetected%   | 66.67%                        |\n'
-                '| Quality Rating | N/A |\n'
-                '| Success | false |\n'
-                '\n'
-                '\n'
-                '## Undetected mutations in file : path.dart\n'
-                'Line 1:<br>\n'
-                '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(255, 200, 200);">- <span style="background-color: rgb(255, 50, 50);">var x</span> = 0;</span><br>\n'
-                '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(200, 255, 200);">+ <span style="background-color: rgb(50, 255, 50);">var x</span> = a;</span><br>\n'
-                '\n'
-                '\n');
+            '| Timeouts      | 1                        |\n'
+            '| Undetected    | 2                        |\n'
+            '| Undetected%   | 66.67%                        |\n'
+            '| Quality Rating | N/A |\n'
+            '| Success | false |\n'
+            '\n'
+            '\n'
+            '## Undetected mutations in file : path.dart\n'
+            'Line 1:<br>\n'
+            '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(255, 200, 200);">- <span style="background-color: rgb(255, 50, 50);">var x</span> = 0;</span><br>\n'
+            '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(200, 255, 200);">+ <span style="background-color: rgb(50, 255, 50);">var x</span> = a;</span><br>\n'
+            '\n'
+            '\n');
       });
     });
 

@@ -42,8 +42,9 @@ class MutationProgressBar {
     final pct = 1.0 - failed.toDouble() / file.maximum.toDouble();
     final prefix = 100 * pct <= threshold ? 'FAILED' : 'OK';
     final text = '$prefix: $failed/${file.maximum} '
-        '(${asPercentString(failed, file.maximum)}) '
-        'mutations were not detected!'.padRight(_width);
+            '(${asPercentString(failed, file.maximum)}) '
+            'mutations were not detected!'
+        .padRight(_width);
     _writeText(text, true);
   }
 

@@ -55,9 +55,9 @@ String removeNewline(String s) {
 }
 
 String _createMutationReportList(
-    int line,
-    List<MutatedLine> mutations,
-    String title,
+  int line,
+  List<MutatedLine> mutations,
+  String title,
 ) {
   final rv = StringBuffer('<b>$title</b>\n<table class="mutationTable">\n');
   int i = 1;
@@ -127,8 +127,7 @@ String createSourceHtmlFile(
     final fmtln = escapeCharsForHtml(removeNewline(src));
     if (file.lineHasMutation(i)) {
       final colorClass = file.lineHasProblem(i) ? 'problem' : 'hit';
-      rv +=
-          '''
+      rv += '''
 <a name="$i"><button class="collapsible $colorClass"><pre class="fileContents"><span class="lineNumber">${i.toString().padLeft(8)} </span>$fmtln</pre></button>
 <div class="content">
 ${createMutationList(i, file)}

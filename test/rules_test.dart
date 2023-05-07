@@ -35,7 +35,7 @@ super(name, false) {
 ''';
       for (final mut in configuration.mutations) {
         for (final moo
-        in mut.allMutations(testSource, [], configuration.exclusions)) {
+            in mut.allMutations(testSource, [], configuration.exclusions)) {
           print(moo);
           fail('There should be no matches!');
         }
@@ -71,7 +71,7 @@ super(name, false) {
 ''';
       for (final mut in configuration.mutations) {
         for (final moo
-        in mut.allMutations(testSource, [], configuration.exclusions)) {
+            in mut.allMutations(testSource, [], configuration.exclusions)) {
           expect(moo.line.line, 4);
         }
       }
@@ -106,7 +106,7 @@ super(name, false) {
 ''';
       for (final mut in configuration.mutations) {
         for (final moo
-        in mut.allMutations(testSource, [], configuration.exclusions)) {
+            in mut.allMutations(testSource, [], configuration.exclusions)) {
           expect(moo.line.line, 4);
         }
       }

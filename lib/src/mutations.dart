@@ -176,7 +176,7 @@ class MutatedLine {
     this.original,
     this.mutated,
     this.mutation,
-) {
+  ) {
     /// make wrong states impossible to repesent
     start = first >= 0 ? first : 0;
     end = last <= original.length ? last : original.length;

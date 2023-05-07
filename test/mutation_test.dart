@@ -76,7 +76,7 @@ Line 3:<br>
           expect(
             modified.line.formatMutatedCodeToHTML(),
             '<span class="addedLine">+  '
-                '<span class="changedTokens">bbb</span> </span>',
+            '<span class="changedTokens">bbb</span> </span>',
           );
         }
       }
@@ -85,7 +85,7 @@ Line 3:<br>
 
     group('regex', () {
       final reg =
-      RegexReplacement(r'$2 masd o\r\n $3 asdas \\\\$4\t\$123a $e $1');
+          RegexReplacement(r'$2 masd o\r\n $3 asdas \\\\$4\t\$123a $e $1');
       test('Regex string without escape sequences', () {
         const expected = '\$2 masd o\r\n \$3 asdas \\\\\\\$4\t\$123a \$e \$1';
         expect(reg.text, expected);
@@ -112,7 +112,7 @@ Line 3:<br>
         final mutation3 = Mutation(RegExp('([a]+) ([b]+)'));
         mutation3.replacements.add(reg2);
         expect(
-              () {
+          () {
             const input = 'xxx aa bbbb ccc ddd xxx';
             for (final modified in mutation3.allMutations(input, [], [])) {
               print(modified.text);
@@ -136,14 +136,14 @@ Line 3:<br>
         expect(
             mut.toHTML(),
             'Line 2:<br>\n'
-                '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(255, 200, 200);">- <span style="background-color: rgb(255, 50, 50);">.co</span>llapsible {</span><br>\n'
-                '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(200, 255, 200);">+ <span style="background-color: rgb(50, 255, 50);">-.co</span>llapsible {</span><br>\n');
+            '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(255, 200, 200);">- <span style="background-color: rgb(255, 50, 50);">.co</span>llapsible {</span><br>\n'
+            '&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color: rgb(200, 255, 200);">+ <span style="background-color: rgb(50, 255, 50);">-.co</span>llapsible {</span><br>\n');
         expect(mut.toMarkdown(), mut.toHTML());
         expect(mut.toString(), '2: "-.collapsible {"');
         expect(
           mut.formatMutatedCodeToHTML(),
           '<span class="addedLine">+ '
-              '<span class="changedTokens">-.co</span>llapsible {</span>',
+          '<span class="changedTokens">-.co</span>llapsible {</span>',
         );
       });
 

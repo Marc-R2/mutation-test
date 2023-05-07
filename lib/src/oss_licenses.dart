@@ -737,8 +737,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   ),
   Package(
     name: 'lints',
-    description:
-        '''
+    description: '''
 Official Dart lint rules. Defines the 'core' and 'recommended' set of lints suggested by the Dart team.
 ''',
     repository: 'https://github.com/dart-lang/lints',
@@ -1185,8 +1184,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   ),
   Package(
     name: 'shelf',
-    description:
-        '''
+    description: '''
 A model for web server middleware that encourages composition and easy reuse.
 ''',
     repository: 'https://github.com/dart-lang/shelf/tree/master/pkgs/shelf',
@@ -1305,8 +1303,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   ),
   Package(
     name: 'shelf_web_socket',
-    description:
-        '''
+    description: '''
 A shelf handler that wires up a listener for every connection.
 ''',
     repository:
@@ -1888,8 +1885,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.''',
   ),
   Package(
     name: 'webkit_inspection_protocol',
-    description:
-        '''
+    description: '''
 A client for the Chrome DevTools Protocol (previously called the Webkit Inspection Protocol).
 ''',
     repository: 'https://github.com/google/webkit_inspection_protocol.dart',

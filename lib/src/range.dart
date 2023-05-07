@@ -42,7 +42,6 @@ class TokenRange extends Range {
 
 /// A range in the source file delimited by line numbers.
 class LineRange extends Range {
-
   LineRange(this.start, this.end);
   final int start;
   final int end;
@@ -58,7 +57,6 @@ class LineRange extends Range {
 
 /// A range in the source file defined by a regex (anyhting matching the regex is excluded).
 class RegexRange extends Range {
-
   RegexRange(this.pattern);
   final RegExp pattern;
 

@@ -8,7 +8,7 @@ import 'ratings_test.dart' as ratings;
 import 'report_format_test.dart' as report_format;
 import 'string_helpers_test.dart' as string_helpers;
 
-void main () {
+void main() {
   diverse.main();
   html_reporter.main();
   mutation.main();
